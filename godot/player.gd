@@ -1,16 +1,22 @@
 extends CharacterBody2D
-var score = 0
+class_name Player
+
+
+@export var score := 0
+@export var death = false
 
 const SPEED = 150.0
 const JUMP_VELOCITY = -400.0
 const REMOVABLE_ATLAS := Vector2i(11, 7)
 const SPIKE_ATLAS := Vector2i(8,3)
-
+var game_over = false
 @onready var _tile_layer: TileMapLayer = get_node("../Tiles/TileMapLayerZ2")
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(delta: float) -> void:	
 	# Add the gravity.
+	
+	
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
@@ -30,11 +36,12 @@ func _physics_process(delta: float) -> void:
 	_erase_touching_removable_tiles()
 
 
+
 func _erase_touching_removable_tiles() -> void:
 	if _tile_layer == null:
 		return
 	var bounds := _player_overlap_cell_bounds(_tile_layer)
-	var player_aabb := _player_aabb_in_layer_local(_tile_layer)
+	var spike_probe := _player_spike_probe_rect(_tile_layer)
 	for y in range(bounds.position.y, bounds.end.y):
 		for x in range(bounds.position.x, bounds.end.x):
 			var cell := Vector2i(x, y)
@@ -45,8 +52,10 @@ func _erase_touching_removable_tiles() -> void:
 				score += 1
 				print(score)
 			if _tile_layer.get_cell_atlas_coords(cell) == SPIKE_ATLAS:
-				if player_aabb.intersects(_spike_damage_rect_local(_tile_layer, cell)):
-					print("touched!")
+				if game_over:
+					continue
+				if spike_probe.intersects(_spike_damage_rect_local(_tile_layer, cell)):					
+					death = true
 
 
 func _player_overlap_cell_bounds(layer: TileMapLayer) -> Rect2i:
@@ -93,9 +102,25 @@ func _player_aabb_in_layer_local(layer: TileMapLayer) -> Rect2:
 	return Rect2(min_p, max_p - min_p)
 
 
-## Spikes only hurt on the bottom half of the tile (matches a short physics polygon).
+## Bottom of hitbox: full AABB often sits in the upper half of a tile while feet touch the spike.
+func _player_spike_probe_rect(layer: TileMapLayer) -> Rect2:
+	var body := _player_aabb_in_layer_local(layer)
+	var foot_h: float = maxf(body.size.y * 0.55, 8.0)
+	if body.size.y < 1.0 or body.size.x < 1.0:
+		var cs := $CollisionShape2D as CollisionShape2D
+		var p := layer.to_local(cs.global_position + Vector2(0.0, 6.0))
+		return Rect2(p - Vector2(6.0, 4.0), Vector2(12.0, 8.0))
+	return Rect2(
+		Vector2(body.position.x, body.position.y + body.size.y - foot_h),
+		Vector2(body.size.x, foot_h)
+	)
+
+
+## Bottom half of tile (+ tiny upward bleed) so the seam with a half-tile collider still counts.
 func _spike_damage_rect_local(layer: TileMapLayer, cell: Vector2i) -> Rect2:
 	var ts := layer.tile_set
 	var sz := Vector2(ts.tile_size)
 	var top_left := layer.map_to_local(cell)
-	return Rect2(top_left + Vector2(0.0, sz.y * 0.5), Vector2(sz.x, sz.y * 0.5))
+	var bleed := 2.0
+	var y0 := sz.y * 0.5 - bleed
+	return Rect2(top_left + Vector2(0.0, y0), Vector2(sz.x, sz.y - y0))
