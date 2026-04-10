@@ -2,16 +2,22 @@
 
 [ext_resource type="TileSet" uid="uid://umape1tfhyj1" path="res://Tiles1.tres" id="1_fj7yv"]
 [ext_resource type="Script" uid="uid://dayi50rgrh51x" path="res://tiles.gd" id="1_gbfbk"]
-[ext_resource type="Script" uid="uid://ccfott2vw1del" path="res://TileMap.gd" id="2_036b0"]
+[ext_resource type="Script" uid="uid://d0nhl0c06ortq" path="res://world.gd" id="1_wse8f"]
 [ext_resource type="Script" uid="uid://80kl10p8d3vr" path="res://player.gd" id="2_aqk2v"]
 [ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="2_tlwt5"]
 [ext_resource type="Script" uid="uid://boa5scnw8xkf7" path="res://camera_2d.gd" id="3_cam"]
-[ext_resource type="Script" uid="uid://db6fnc1qagjt6" path="res://death_screen.gd" id="7_pkg7o"]
+[ext_resource type="Script" uid="uid://cxrr3crqddsm4" path="res://ai.gd" id="7_2o6r5"]
+[ext_resource type="PackedScene" uid="uid://blr2s8x103nai" path="res://collision_shape_2d.tscn" id="7_ic0uy"]
 [ext_resource type="Script" uid="uid://dn12u7ocbrg15" path="res://main_menu.gd" id="8_gbfbk"]
+[ext_resource type="Script" uid="uid://dvwh2vat8ldtm" path="res://ui_death.gd" id="8_ioo17"]
+[ext_resource type="Script" uid="uid://be6y8lf08ujba" path="res://camera_2d_ai.gd" id="8_k3n1d"]
+[ext_resource type="Script" uid="uid://r7a5dcar2qck" path="res://start_player_button.gd" id="8_wse8f"]
+[ext_resource type="Script" uid="uid://uusxfhw2epny" path="res://button.gd" id="9_wse8f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aqk2v"]
 
 [node name="World" type="Node2D" unique_id=785273351]
+script = ExtResource("1_wse8f")
 
 [node name="Tiles" type="Node2D" parent="." unique_id=145970510]
 texture_filter = 1
@@ -21,7 +27,6 @@ script = ExtResource("1_gbfbk")
 position = Vector2(0, -2)
 tile_map_data = PackedByteArray("AAD0/wMAAAAEAAUAAAD3/wMAAAAEAAUAAAD4/wMAAAAEAAUAAAD5/wMAAAAEAAUAAAD6/wMAAAAEAAUAAAD7/wMAAAAEAAUAAAD8/wMAAAAEAAUAAAD9/wMAAAAEAAUAAAD+/wMAAAAEAAUAAAD//wMAAAAEAAUAAAACAAMAAAAEAAUAAAADAAMAAAAEAAUAAAAEAAMAAAAEAAUAAAAFAAMAAAAEAAUAAAAGAAMAAAAEAAUAAAAHAAMAAAAEAAUAAAAIAAMAAAAEAAUAAAAJAAMAAAAEAAUAAAAKAAMAAAAEAAUAAAALAAMAAAAEAAUAAAD2/wIAAAACAAEAAAD3/wIAAAACAAEAAAD4/wIAAAACAAEAAAD5/wIAAAACAAEAAAD6/wIAAAACAAEAAAD7/wIAAAACAAEAAAD8/wIAAAACAAEAAAD9/wIAAAACAAEAAAD+/wIAAAACAAEAAAD//wIAAAACAAEAAAAAAAIAAAACAAEAAAABAAIAAAACAAEAAAACAAIAAAACAAEAAAADAAIAAAACAAEAAAAEAAIAAAACAAEAAAAFAAIAAAACAAEAAAAGAAIAAAACAAEAAAAHAAIAAAACAAEAAAAIAAIAAAACAAEAAAAJAAIAAAACAAEAAAAKAAIAAAACAAEAAAD2/wUAAAADAAYAAAD2/wYAAAADAAYAAAD1/wUAAAABAAYAAAD1/wYAAAABAAYAAAD3/wQAAAAEAAUAAAD4/wQAAAAEAAUAAAD5/wQAAAAEAAUAAAD6/wQAAAAEAAUAAAD7/wQAAAAEAAUAAAD8/wQAAAAEAAUAAAD//wQAAAAEAAUAAAACAAQAAAAEAAUAAAADAAQAAAAEAAUAAAAEAAQAAAAEAAUAAAAFAAQAAAAEAAUAAAAGAAQAAAAEAAUAAAAHAAQAAAAEAAUAAAAIAAQAAAAEAAUAAAD+/wQAAAADAAEAAAD9/wQAAAABAAEAAAD+/wUAAAADAAYAAAD+/wYAAAADAAYAAAD9/wUAAAABAAYAAAD9/wYAAAABAAYAAAABAAQAAAADAAYAAAAAAAQAAAABAAYAAAABAAMAAAADAAEAAAAAAAMAAAABAAEAAAD//wUAAAAEAAUAAAAAAAUAAAAEAAUAAAABAAUAAAAEAAUAAAACAAUAAAAEAAUAAAADAAUAAAAEAAUAAAAEAAUAAAAEAAUAAAAFAAUAAAAEAAUAAAAGAAUAAAAEAAUAAAAHAAUAAAAEAAUAAAAIAAUAAAAEAAUAAAAJAAUAAAAEAAUAAAAKAAUAAAAEAAUAAAALAAQAAAAEAAUAAAAKAAQAAAAEAAUAAAAJAAQAAAAEAAUAAAALAAUAAAAEAAUAAAAKAAYAAAAEAAUAAAAJAAYAAAAEAAUAAAAIAAYAAAAEAAUAAAAHAAYAAAAEAAUAAAAGAAYAAAAEAAUAAAAFAAYAAAAEAAUAAAAEAAYAAAAEAAUAAAADAAYAAAAEAAUAAAACAAYAAAAEAAUAAAABAAYAAAAEAAUAAAAAAAYAAAAEAAUAAAD//wYAAAAEAAUAAAALAAYAAAAEAAUAAAALAAcAAAAEAAUAAAAKAAcAAAAEAAUAAAAJAAcAAAAEAAUAAAAIAAcAAAAEAAUAAAAHAAcAAAAEAAUAAAAGAAcAAAAEAAUAAAAFAAcAAAAEAAUAAAAEAAcAAAAEAAUAAAADAAcAAAAEAAUAAAACAAcAAAAEAAUAAAABAAcAAAAEAAUAAAAAAAcAAAAEAAUAAAD//wcAAAAEAAUAAAD+/wcAAAAEAAUAAAD9/wcAAAAEAAUAAAD8/wcAAAAEAAUAAAD7/wcAAAAEAAUAAAD6/wcAAAAEAAUAAAD7/wYAAAAEAAUAAAD7/wUAAAAEAAUAAAD8/wUAAAAEAAUAAAD8/wYAAAAEAAUAAAD6/wYAAAAEAAUAAAD5/wYAAAAEAAUAAAD5/wUAAAAEAAUAAAD6/wUAAAAEAAUAAAD5/wcAAAAEAAUAAAD4/wcAAAAEAAUAAAD4/wYAAAAEAAUAAAD3/wYAAAAEAAUAAAD3/wUAAAAEAAUAAAD3/wcAAAAEAAUAAAD0/wcAAAAEAAUAAAD0/wYAAAAEAAUAAAD0/wUAAAAEAAUAAAD0/wQAAAAEAAUAAAD4/wUAAAAEAAUAAAD2/wcAAAADAAYAAAD1/wcAAAABAAYAAAD1////AAADAAYAAAD1/wAAAAADAAYAAAD1/wEAAAADAAYAAAD1//7/AAADAAYAAAD0/wIAAAAEAAUAAAD0/wEAAAAEAAUAAAD0/wAAAAAEAAUAAAD0////AAAEAAUAAAD0//7/AAAEAAUAAADz//7/AAAEAAUAAADy//7/AAAEAAUAAADx//7/AAAEAAUAAADw//7/AAAEAAUAAADv//7/AAAEAAUAAADu//7/AAAEAAUAAADt//7/AAAEAAUAAADt////AAAEAAUAAADt/wAAAAAEAAUAAADt/wEAAAAEAAUAAADt/wIAAAAEAAUAAADt/wMAAAAEAAUAAADt/wQAAAAEAAUAAADt/wUAAAAEAAUAAADt/wYAAAAEAAUAAADt/wcAAAAEAAUAAADu/wcAAAAEAAUAAADv/wcAAAAEAAUAAADw/wYAAAAEAAUAAADx/wYAAAAEAAUAAADy/wYAAAAEAAUAAADy/wcAAAAEAAUAAADz/wcAAAAEAAUAAADx/wcAAAAEAAUAAADw/wcAAAAEAAUAAADv/wYAAAAEAAUAAADu/wYAAAAEAAUAAADu/wUAAAAEAAUAAADz/wYAAAAEAAUAAADz/wUAAAAEAAUAAADz/wQAAAAEAAUAAADz/wMAAAAEAAUAAADz/wIAAAAEAAUAAADz/wEAAAAEAAUAAADz/wAAAAAEAAUAAADy/wAAAAAEAAUAAADy////AAAEAAUAAADx////AAAEAAUAAADw////AAAEAAUAAADv////AAAEAAUAAADu////AAAEAAUAAADu/wAAAAAEAAUAAADv/wAAAAAEAAUAAADv/wEAAAAEAAUAAADw/wIAAAAEAAUAAADw/wMAAAAEAAUAAADw/wQAAAAEAAUAAADw/wUAAAAEAAUAAADv/wUAAAAEAAUAAADu/wQAAAAEAAUAAADu/wMAAAAEAAUAAADu/wIAAAAEAAUAAADu/wEAAAAEAAUAAADx/wAAAAAEAAUAAADx/wEAAAAEAAUAAADx/wIAAAAEAAUAAADv/wMAAAAEAAUAAADv/wIAAAAEAAUAAADw/wEAAAAEAAUAAADw/wAAAAAEAAUAAADx/wMAAAAEAAUAAADx/wQAAAAEAAUAAADx/wUAAAAEAAUAAADv/wQAAAAEAAUAAADy/wMAAAAEAAUAAADy/wIAAAAEAAUAAADy/wEAAAAEAAUAAADy/wQAAAAEAAUAAADy/wUAAAAEAAUAAADz////AAAEAAUAAAD0//3/AAACAAEAAADz//3/AAACAAEAAADy//3/AAACAAEAAADx//3/AAACAAEAAADw//3/AAACAAEAAADv//3/AAACAAEAAADu//3/AAACAAEAAADt//3/AAACAAEAAADs//7/AAAEAAUAAADs////AAAEAAUAAADs/wAAAAAEAAUAAADs/wEAAAAEAAUAAADs/wIAAAAEAAUAAADs/wMAAAAEAAUAAADs/wQAAAAEAAUAAADs/wUAAAAEAAUAAADs/wYAAAAEAAUAAADr/wYAAAAEAAUAAADr/wUAAAAEAAUAAADr/wQAAAAEAAUAAADr/wMAAAAEAAUAAADr/wIAAAAEAAUAAADr/wEAAAAEAAUAAADr/wAAAAAEAAUAAADr////AAAEAAUAAADr//7/AAAEAAUAAADq//7/AAAEAAUAAADq////AAAEAAUAAADq/wAAAAAEAAUAAADq/wEAAAAEAAUAAADq/wIAAAAEAAUAAADq/wMAAAAEAAUAAADq/wQAAAAEAAUAAADq/wUAAAAEAAUAAADq/wYAAAAEAAUAAADq/wcAAAAEAAUAAADr/wcAAAAEAAUAAADs/wcAAAAEAAUAAADs//3/AAACAAEAAADr//3/AAACAAEAAADq//3/AAACAAEAAAD1/wIAAAAEAAEAAAD1//3/AAADAAEAAAD2/wQAAAADAAEAAAD1/wQAAAABAAEAAAD1/wMAAAAEAAUAAAD2/wMAAAAEAAUAAAD2/wEAAAALAAcAAAD5/wEAAAAIAAMAAAALAAEAAAAEAAUAAAALAAAAAAAEAAUAAAALAP//AAAEAAUAAAALAP7/AAAEAAUAAAALAP3/AAAEAAUAAAALAAIAAAAEAAUAAAAKAAEAAAALAAcAAAAHAAEAAAAIAAMAAAAGAAEAAAAEAAUAAADoA+YDAAAEAAUAAADnA+YDAAAEAAUAAADmA+YDAAAEAAUAAADmA+cDAAAEAAUAAADmA+gDAAAEAAUAAADmA+kDAAAEAAUAAADmA+oDAAAEAAUAAADnA+oDAAAEAAUAAADoA+oDAAAEAAUAAADpA+oDAAAEAAUAAADpA+kDAAAEAAUAAADpA+gDAAAEAAUAAADoA+gDAAAEAAUAAADrA+YDAAAEAAUAAADrA+cDAAAEAAUAAADrA+gDAAAEAAUAAADrA+kDAAAEAAUAAADrA+oDAAAEAAUAAADsA+YDAAAEAAUAAADtA+YDAAAEAAUAAADtA+cDAAAEAAUAAADtA+gDAAAEAAUAAADsA+gDAAAEAAUAAADtA+kDAAAEAAUAAADtA+oDAAAEAAUAAADvA+oDAAAEAAUAAADvA+kDAAAEAAUAAADvA+gDAAAEAAUAAADvA+cDAAAEAAUAAADvA+YDAAAEAAUAAADwA+cDAAAEAAUAAADxA+gDAAAEAAUAAADyA+cDAAAEAAUAAADzA+YDAAAEAAUAAADzA+cDAAAEAAUAAADzA+gDAAAEAAUAAADzA+kDAAAEAAUAAADzA+oDAAAEAAUAAAD1A+YDAAAEAAUAAAD1A+cDAAAEAAUAAAD1A+gDAAAEAAUAAAD1A+kDAAAEAAUAAAD1A+oDAAAEAAUAAAD2A+oDAAAEAAUAAAD3A+oDAAAEAAUAAAD2A+gDAAAEAAUAAAD3A+gDAAAEAAUAAAD2A+YDAAAEAAUAAAD3A+YDAAAEAAUAAAA=")
 tile_set = ExtResource("1_fj7yv")
-script = ExtResource("2_036b0")
 
 [node name="Player" type="CharacterBody2D" parent="." unique_id=1958510504]
 script = ExtResource("2_aqk2v")
@@ -40,37 +45,64 @@ position_smoothing_enabled = true
 script = ExtResource("3_cam")
 player = NodePath("../..")
 
-[node name="UI - death" type="CanvasLayer" parent="." unique_id=2000000001]
-layer = 10
+[node name="Ai" type="CharacterBody2D" parent="." unique_id=1016026690]
+script = ExtResource("7_2o6r5")
 
-[node name="Death_Screen" type="Control" parent="UI - death" unique_id=1313180189 node_paths=PackedStringArray("player")]
-layout_mode = 3
-anchors_preset = 0
-script = ExtResource("7_pkg7o")
-player = NodePath("../../Player")
+[node name="CollisionShape2D" parent="Ai" unique_id=1266509224 instance=ExtResource("7_ic0uy")]
+position = Vector2(0, 20)
 
-[node name="Label" type="Label" parent="UI - death/Death_Screen" unique_id=963871258]
-layout_mode = 1
-offset_left = 576.0
-offset_top = 324.0
-offset_right = 648.0
-offset_bottom = 347.0
-text = "You died!"
+[node name="Sprite2D" type="Sprite2D" parent="Ai/CollisionShape2D" unique_id=1862886783]
 
-[node name="Button" type="Button" parent="UI - death/Death_Screen" unique_id=995921027]
-layout_mode = 0
-offset_left = 520.0
-offset_top = 360.0
-offset_right = 720.0
-offset_bottom = 400.0
-text = "go back to menu"
+[node name="Camera2D" type="Camera2D" parent="Ai/CollisionShape2D" unique_id=1449312901]
+zoom = Vector2(3, 3)
+position_smoothing_enabled = true
+script = ExtResource("8_k3n1d")
 
 [node name="Ui - main menu" type="CanvasLayer" parent="." unique_id=1004998110]
 layer = 20
 
-[node name="main_menu" type="Control" parent="Ui - main menu" unique_id=1593517756]
+[node name="MainMenu" type="Control" parent="Ui - main menu" unique_id=1593517756 node_paths=PackedStringArray("player")]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("8_gbfbk")
+player = NodePath("../../Player")
+
+[node name="start-playerButton" type="Button" parent="Ui - main menu/MainMenu" unique_id=1179657778]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Start-player"
+script = ExtResource("8_wse8f")
+
+[node name="start-aiButton" type="Button" parent="Ui - main menu/MainMenu" unique_id=81656691]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 300.0
+offset_right = 617.0
+offset_bottom = 331.0
+text = "start-aiButton"
+
+[node name="UiDeath" type="Control" parent="Ui - main menu" unique_id=1176597002]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("8_ioo17")
+
+[node name="Button" type="Button" parent="Ui - main menu/UiDeath" unique_id=1563909100]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Go back to main menu"
+script = ExtResource("9_wse8f")
+
+[connection signal="reset" from="Ui - main menu/MainMenu" to="Tiles" method="_on_main_menu_reset"]
+[connection signal="reset" from="Ui - main menu/MainMenu" to="Player" method="_on_main_menu_reset"]
+[connection signal="reset" from="Ui - main menu/MainMenu" to="Player/CollisionShape2D/Camera2D" method="_on_main_menu_reset"]
+[connection signal="reset" from="Ui - main menu/MainMenu" to="Ai" method="_on_main_menu_reset"]
+[connection signal="reset" from="Ui - main menu/MainMenu" to="Ai/CollisionShape2D/Camera2D" method="_on_main_menu_reset"]
+[connection signal="pressed" from="Ui - main menu/MainMenu/start-playerButton" to="Ui - main menu/MainMenu" method="_on_startplayer_button_pressed"]
+[connection signal="pressed" from="Ui - main menu/MainMenu/start-aiButton" to="Ui - main menu/MainMenu" method="_on_startai_button_pressed"]
+[connection signal="pressed" from="Ui - main menu/UiDeath/Button" to="Ui - main menu/MainMenu" method="_on_death_button_pressed"]

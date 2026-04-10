@@ -2,15 +2,15 @@ extends Camera2D
 ## Drag the Player node here, or leave empty: uses parent → CollisionShape2D → this, so Player is two levels up.
 @export var player: Player
 
+
 func _ready() -> void:
 	pass
-	var death = get_parent().get_parent().death
-
 ## Same value as `player.death` (read-only from the camera script).
 func _process(_delta: float) -> void:
+	var death = get_parent().get_parent().death
 	if not is_instance_valid(player):
 		return
-	if Player.death == true:
+	if death == true:
 		_teleport_away_on_spike()
 
 
@@ -26,3 +26,11 @@ func reset_follow_player() -> void:
 	top_level = false
 	position_smoothing_enabled = true
 	position = Vector2.ZERO
+
+
+func _on_main_menu_reset(type) -> void:
+	if type == "player":
+		self.enabled = true
+		reset_follow_player()
+	else:
+		self.enabled = false

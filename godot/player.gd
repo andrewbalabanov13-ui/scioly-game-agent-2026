@@ -3,19 +3,34 @@ class_name Player
 
 
 @export var score := 0
-@export var death = false
+@export var death := false
+
 
 const SPEED = 150.0
 const JUMP_VELOCITY = -400.0
 const REMOVABLE_ATLAS := Vector2i(11, 7)
 const SPIKE_ATLAS := Vector2i(8,3)
 var game_over = false
-@onready var _tile_layer: TileMapLayer = get_node("../Tiles/TileMapLayerZ2")
-
-
-func _physics_process(delta: float) -> void:	
-	# Add the gravity.
+var play = false
 	
+@onready var _tile_layer: TileMapLayer = get_node("../Tiles/TileMapLayerZ2")
+@onready var menu = get_node("../Ui - main menu/MainMenu").menu
+
+signal player_position
+func _ready() -> void:
+	hide()
+
+
+
+func _physics_process(delta: float) -> void:
+	emit_signal("player_position",position.x,position.y)
+	menu = get_node("../Ui - main menu/MainMenu").menu
+	# Add the gravity.
+	if menu or not play:
+		hide()
+		return
+	else:
+		show()
 	
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -124,3 +139,13 @@ func _spike_damage_rect_local(layer: TileMapLayer, cell: Vector2i) -> Rect2:
 	var bleed := 2.0
 	var y0 := sz.y * 0.5 - bleed
 	return Rect2(top_left + Vector2(0.0, y0), Vector2(sz.x, sz.y - y0))
+
+
+func _on_main_menu_reset(type) -> void:
+	position.x = 0
+	position.y = 0
+	if type == "player":
+		play = true
+	else:
+		play = false
+	 # Replace with function body.

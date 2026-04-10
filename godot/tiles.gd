@@ -1,16 +1,17 @@
 extends Node2D
+@onready var menu = get_node("../Ui - main menu/MainMenu").menu
 
-@onready var _main_menu_overlay: Control = get_node("../Ui - main menu/Overlay")
 
 
 func _process(_delta: float) -> void:
-	if _is_main_menu_open():
+	pass
+
+func _on_main_menu_reset() -> void:
+	show() # Replace with function body.
+	
+func _physics_process(delta: float) -> void:
+	menu = get_node("../Ui - main menu/MainMenu").menu
+	if menu == true:
 		hide()
 	else:
 		show()
-
-
-func _is_main_menu_open() -> bool:
-	if _main_menu_overlay == null or not _main_menu_overlay.has_method("is_main_menu_open"):
-		return false
-	return _main_menu_overlay.is_main_menu_open()
