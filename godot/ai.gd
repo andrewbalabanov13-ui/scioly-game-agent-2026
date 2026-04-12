@@ -9,32 +9,26 @@ const TILEMULTIPLIER = 1
 signal ai_position
 var q_table = []
 
-var right_tile = 0
-var left_tile = 0
-var up_tile = 0
-var down_tile = 0
-
-var leftest_x_pos = 0
-var rightest_x_pos = 0
-var uppest_y_pos = 0
-var downest_y_pos = 0
+var top_left_tile = 0
+var bottom_right_tile = 0
 
 var epsilon_value = 0.1
 var stop = 1
 var b = 0
 var index = 0
 var action = 0
+var tiled_pos = 0
+
 func _ready() -> void:
 	hide()
 	
-func get_grid():
-	pass
-	
-	
+func get_state():
+	pass	
+
 func episode(posx,posy):
 	position.x = posx
 	position.y = posy
-	stop = 1
+	stop = 0
 	while stop == 1:
 		b = -999999999999999
 		index = 0
@@ -51,7 +45,7 @@ func _physics_process(delta: float) -> void:
 	if play == false:
 		return
 	for x in range(1000):
-		episode(1,0)
+		episode(208,120)
 	
 	
 	move_and_slide()
@@ -69,23 +63,13 @@ func _on_main_menu_reset(type: Variant) -> void:
 		$CollisionShape2D.disabled = true
 
 
-func _on_tile_map_layer_z_2_create_states(all_tile_width,all_tile_height,right_tile_x,left_tile_x,top_tile_y,bottom_tile_y) -> void:
+func _on_tile_map_layer_z_2_create_states(all_tile_width,all_tile_height,Ptop_left_tile,Pbottom_right_tile) -> void:
 	q_table = []
 	for x in all_tile_width:
 		for y in all_tile_height:
 			for z in TILEMULTIPLIER:
 				q_table.append([0,0,0,0])
-	right_tile = right_tile_x
-	left_tile = left_tile_x
-	print(left_tile)
-	up_tile = top_tile_y
-	down_tile = bottom_tile_y
 	tile_size_x = 18 / TILEMULTIPLIER
 	tile_size_y = 18 / TILEMULTIPLIER
-	leftest_x_pos = tile_size_x * left_tile_x
-	rightest_x_pos = tile_size_x * right_tile_x
-	uppest_y_pos = tile_size_y * top_tile_y
-	downest_y_pos = tile_size_y * bottom_tile_y
-		
-	
-	
+	top_left_tile = Ptop_left_tile
+	bottom_right_tile = Pbottom_right_tile

@@ -25,19 +25,19 @@ texture_filter = 1
 script = ExtResource("1_gbfbk")
 
 [node name="TileMapLayerZ2" type="TileMapLayer" parent="Tiles" unique_id=1878963269]
-position = Vector2(-1, -2)
-tile_map_data = PackedByteArray("AAD9/wEAAAACAAEAAAACAAEAAAACAAEAAAADAAEAAAACAAEAAAAEAAEAAAACAAEAAAAFAAEAAAACAAEAAAAGAAEAAAACAAEAAAAHAAEAAAACAAEAAAAIAAEAAAACAAEAAAAJAAEAAAACAAEAAAD8/wEAAAACAAEAAAD7/wEAAAACAAEAAAD6/wEAAAACAAEAAAD5/wEAAAACAAEAAAD4/wEAAAACAAEAAAD3////AAACAAEAAAD3//7/AAACAAEAAAD3//3/AAACAAEAAAD3//z/AAACAAEAAAD3//v/AAACAAEAAAAJAP//AAACAAEAAAAJAP7/AAACAAEAAAAJAP3/AAACAAEAAAAJAPz/AAACAAEAAAAJAPv/AAACAAEAAAAIAAAAAAALAAcAAAD4/wAAAAALAAcAAAD3/wAAAAACAAAAAAD3/wEAAAACAAAAAAAJAAAAAAACAAAAAAD6/wAAAAAIAAMAAAD1//7/AAABAAMAAAD0//7/AAABAAMAAADz//7/AAABAAMAAADy//7/AAABAAMAAAD2//7/AAABAAMAAAACAAIAAAABAAMAAAABAAIAAAABAAMAAAAAAAIAAAABAAMAAAD//wIAAAABAAMAAAD+/wIAAAABAAMAAAD9/wIAAAABAAMAAAA=")
+tile_map_data = PackedByteArray("AAAAAAAAAAABAAAAAAAAAAEAAAABAAAAAAAAAAIAAAABAAAAAAAAAAMAAAABAAAAAAAAAAQAAAABAAAAAAAAAAUAAAABAAAAAAAAAAYAAAABAAAAAAAAAAcAAAABAAAAAAAAAAgAAAABAAAAAAAAAAkAAAABAAAAAAABAAkAAAABAAAAAAACAAkAAAABAAAAAAADAAkAAAABAAAAAAAEAAkAAAABAAAAAAAFAAkAAAABAAAAAAAGAAkAAAABAAAAAAAQAAkAAAABAAAAAAARAAkAAAABAAAAAAASAAkAAAABAAAAAAATAAkAAAABAAAAAAAUAAkAAAABAAAAAAAVAAkAAAABAAAAAAAPAAkAAAABAAAAAAAOAAkAAAABAAAAAAANAAkAAAABAAAAAAAMAAkAAAABAAAAAAALAAkAAAABAAAAAAAKAAkAAAABAAAAAAAJAAkAAAABAAAAAAAIAAkAAAABAAAAAAAHAAkAAAABAAAAAAAWAAkAAAABAAAAAAAWAAgAAAABAAAAAAAWAAcAAAABAAAAAAAWAAYAAAABAAAAAAAWAAUAAAABAAAAAAAWAAQAAAABAAAAAAAWAAMAAAABAAAAAAAWAAIAAAABAAAAAAAWAAEAAAABAAAAAAAWAAAAAAABAAAAAAAVAAgAAAALAAcAAAABAAgAAAALAAcAAAAFAAgAAAAIAAMAAAA=")
 tile_set = ExtResource("1_fj7yv")
 script = ExtResource("4_70uel")
 
 [node name="Player" type="CharacterBody2D" parent="." unique_id=1958510504]
+position = Vector2(208, 120)
 script = ExtResource("2_aqk2v")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=535973161]
 shape = SubResource("RectangleShape2D_aqk2v")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player/CollisionShape2D" unique_id=2142395895]
-position = Vector2(-4.7683716e-07, 3.874302e-07)
+position = Vector2(0, -8.940694e-08)
 scale = Vector2(0.15625, 0.15625001)
 texture = ExtResource("2_tlwt5")
 
@@ -48,6 +48,7 @@ script = ExtResource("3_cam")
 player = NodePath("../..")
 
 [node name="Ai" type="CharacterBody2D" parent="." unique_id=1016026690]
+position = Vector2(208, 120)
 script = ExtResource("7_2o6r5")
 
 [node name="CollisionShape2D" parent="Ai" unique_id=1266509224 instance=ExtResource("7_ic0uy")]
@@ -66,39 +67,63 @@ layer = 20
 [node name="MainMenu" type="Control" parent="Ui - main menu" unique_id=1593517756 node_paths=PackedStringArray("player")]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = -256.0
+offset_top = 32.0
+offset_right = -216.0
+offset_bottom = 72.0
 script = ExtResource("8_gbfbk")
 player = NodePath("../../Player")
+metadata/_edit_use_anchors_ = true
 
 [node name="start-playerButton" type="Button" parent="Ui - main menu/MainMenu" unique_id=1179657778]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 6.0
+anchor_top = 2.6
+anchor_right = 8.3
+anchor_bottom = 3.175
 offset_right = 8.0
 offset_bottom = 8.0
 text = "Start-player"
 script = ExtResource("8_wse8f")
+metadata/_edit_use_anchors_ = true
 
 [node name="start-aiButton" type="Button" parent="Ui - main menu/MainMenu" unique_id=81656691]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -6.9
+anchor_top = -6.5
+anchor_right = -6.9
+anchor_bottom = -6.5
 offset_left = 500.0
 offset_top = 300.0
 offset_right = 617.0
 offset_bottom = 331.0
 text = "start-aiButton"
+metadata/_edit_use_anchors_ = true
 
 [node name="UiDeath" type="Control" parent="Ui - main menu" unique_id=1176597002]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = -256.0
+offset_top = 32.0
+offset_right = -216.0
+offset_bottom = 72.0
 script = ExtResource("8_ioo17")
+metadata/_edit_use_anchors_ = true
 
 [node name="Button" type="Button" parent="Ui - main menu/UiDeath" unique_id=1563909100]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 9.575
+anchor_top = -0.025
+anchor_right = 13.95
+anchor_bottom = 0.55
 offset_right = 8.0
 offset_bottom = 8.0
 text = "Go back to main menu"
 script = ExtResource("9_wse8f")
+metadata/_edit_use_anchors_ = true
 
 [connection signal="create_states" from="Tiles/TileMapLayerZ2" to="Ai" method="_on_tile_map_layer_z_2_create_states"]
 [connection signal="reset" from="Ui - main menu/MainMenu" to="Player" method="_on_main_menu_reset"]

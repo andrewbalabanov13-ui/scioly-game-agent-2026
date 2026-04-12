@@ -12,7 +12,7 @@ const REMOVABLE_ATLAS := Vector2i(11, 7)
 const SPIKE_ATLAS := Vector2i(8,3)
 var game_over = false
 var play = false
-	
+var saved_deleted_tiles = []
 @onready var _tile_layer: TileMapLayer = get_node("../Tiles/TileMapLayerZ2")
 @onready var menu = get_node("../Ui - main menu/MainMenu").menu
 
@@ -65,6 +65,7 @@ func _erase_touching_removable_tiles() -> void:
 				continue
 			if _tile_layer.get_cell_atlas_coords(cell) == REMOVABLE_ATLAS:
 				_tile_layer.erase_cell(cell)
+				saved_deleted_tiles.append(cell)
 				score += 1
 				print(score)
 			if _tile_layer.get_cell_atlas_coords(cell) == SPIKE_ATLAS:
@@ -143,10 +144,13 @@ func _spike_damage_rect_local(layer: TileMapLayer, cell: Vector2i) -> Rect2:
 
 
 func _on_main_menu_reset(type) -> void:
-	position.x = 0
-	position.y = 0
+	position.x = 208
+	position.y = 120
 	if type == "player":
 		play = true
 	else:
 		play = false
+	for x in saved_deleted_tiles:
+		_tile_layer.set_cell(x,0,REMOVABLE_ATLAS,0)
+	saved_deleted_tiles = []
 	 # Replace with function body.
