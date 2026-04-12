@@ -1,0 +1,15 @@
+[gd_scene format=4 uid="uid://43fny2kvorft"]
+
+[ext_resource type="Script" uid="uid://dayi50rgrh51x" path="res://tiles.gd" id="1_d6bvg"]
+[ext_resource type="TileSet" uid="uid://umape1tfhyj1" path="res://Tiles1.tres" id="2_7ivye"]
+[ext_resource type="Script" uid="uid://bwumq507q5utj" path="res://tile_map_layer_z_2.gd" id="3_vra4g"]
+
+[node name="Tiles" type="Node2D" unique_id=1542097818]
+texture_filter = 1
+script = ExtResource("1_d6bvg")
+
+[node name="TileMapLayerZ2" type="TileMapLayer" parent="." unique_id=1878963269]
+position = Vector2(0, -2)
+tile_map_data = PackedByteArray("AAD9/wEAAAACAAEAAAD+/wEAAAACAAEAAAD8/wEAAAACAAEAAAD7/wEAAAACAAEAAAD6/wEAAAACAAEAAAD5/wEAAAACAAEAAAD4/wEAAAACAAEAAAD4/wAAAAALAAcAAAD6/wAAAAAIAAMAAAAJAAEAAAAEAAUAAAAJAAAAAAAEAAUAAAAJAPz/AAAEAAUAAAAJAP3/AAAEAAUAAAAJAP7/AAAEAAUAAAAJAP//AAAEAAUAAAD3/wEAAAAEAAUAAAD3/wAAAAAEAAUAAAD3////AAAEAAUAAAD3//7/AAAEAAUAAAD3//3/AAAEAAUAAAD3//z/AAAEAAUAAAD3//v/AAAEAAUAAAD3//r/AAAEAAUAAAAIAAEAAAACAAEAAAAHAAEAAAACAAEAAAAGAAEAAAACAAEAAAAFAAEAAAACAAEAAAAEAAEAAAACAAEAAAADAAEAAAACAAEAAAACAAEAAAACAAEAAAABAAEAAAACAAEAAAAAAAEAAAACAAEAAAD//wEAAAACAAEAAAAJAPv/AAAEAAUAAAAIAAAAAAALAAcAAAA=")
+tile_set = ExtResource("2_7ivye")
+script = ExtResource("3_vra4g")

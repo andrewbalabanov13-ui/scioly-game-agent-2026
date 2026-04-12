@@ -10,7 +10,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-
 func _on_main_menu_reset(type: Variant) -> void:
 	if type == "ai":
 		self.enabled = true

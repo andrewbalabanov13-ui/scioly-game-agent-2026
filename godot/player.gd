@@ -19,6 +19,7 @@ var play = false
 signal player_position
 func _ready() -> void:
 	hide()
+	
 
 
 
