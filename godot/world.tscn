@@ -7,8 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="2_tlwt5"]
 [ext_resource type="Script" uid="uid://boa5scnw8xkf7" path="res://camera_2d.gd" id="3_cam"]
 [ext_resource type="Script" uid="uid://bwumq507q5utj" path="res://tile_map_layer_z_2.gd" id="4_70uel"]
-[ext_resource type="Script" uid="uid://cxrr3crqddsm4" path="res://ai.gd" id="7_2o6r5"]
-[ext_resource type="PackedScene" uid="uid://blr2s8x103nai" path="res://collision_shape_2d.tscn" id="7_ic0uy"]
+[ext_resource type="Script" uid="uid://bbuywqda8y81x" path="res://ai2.gd" id="8_70uel"]
 [ext_resource type="Script" uid="uid://dn12u7ocbrg15" path="res://main_menu.gd" id="8_gbfbk"]
 [ext_resource type="Script" uid="uid://dvwh2vat8ldtm" path="res://ui_death.gd" id="8_ioo17"]
 [ext_resource type="Script" uid="uid://be6y8lf08ujba" path="res://camera_2d_ai.gd" id="8_k3n1d"]
@@ -17,27 +16,20 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aqk2v"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dlai5"]
+size = Vector2(20, 19)
+
 [node name="World" type="Node2D" unique_id=785273351]
 script = ExtResource("1_wse8f")
 
-[node name="Tiles" type="Node2D" parent="." unique_id=1542097818]
-texture_filter = 1
-script = ExtResource("1_gbfbk")
-
-[node name="TileMapLayerZ2" type="TileMapLayer" parent="Tiles" unique_id=1878963269]
-tile_map_data = PackedByteArray("AAAAAAAAAAABAAAAAAAAAAEAAAABAAAAAAAAAAIAAAABAAAAAAAAAAMAAAABAAAAAAAAAAQAAAABAAAAAAAAAAUAAAABAAAAAAAAAAYAAAABAAAAAAAAAAcAAAABAAAAAAAAAAgAAAABAAAAAAAAAAkAAAABAAAAAAABAAkAAAABAAAAAAACAAkAAAABAAAAAAADAAkAAAABAAAAAAAEAAkAAAABAAAAAAAFAAkAAAABAAAAAAAGAAkAAAABAAAAAAAQAAkAAAABAAAAAAARAAkAAAABAAAAAAASAAkAAAABAAAAAAATAAkAAAABAAAAAAAUAAkAAAABAAAAAAAVAAkAAAABAAAAAAAPAAkAAAABAAAAAAAOAAkAAAABAAAAAAANAAkAAAABAAAAAAAMAAkAAAABAAAAAAALAAkAAAABAAAAAAAKAAkAAAABAAAAAAAJAAkAAAABAAAAAAAIAAkAAAABAAAAAAAHAAkAAAABAAAAAAAWAAkAAAABAAAAAAAWAAgAAAABAAAAAAAWAAcAAAABAAAAAAAWAAYAAAABAAAAAAAWAAUAAAABAAAAAAAWAAQAAAABAAAAAAAWAAMAAAABAAAAAAAWAAIAAAABAAAAAAAWAAEAAAABAAAAAAAWAAAAAAABAAAAAAAVAAgAAAALAAcAAAABAAgAAAALAAcAAAAFAAgAAAAIAAMAAAA=")
-tile_set = ExtResource("1_fj7yv")
-script = ExtResource("4_70uel")
-
 [node name="Player" type="CharacterBody2D" parent="." unique_id=1958510504]
-position = Vector2(208, 120)
 script = ExtResource("2_aqk2v")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=535973161]
 shape = SubResource("RectangleShape2D_aqk2v")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player/CollisionShape2D" unique_id=2142395895]
-position = Vector2(0, -8.940694e-08)
+position = Vector2(0, -1.9073486e-06)
 scale = Vector2(0.15625, 0.15625001)
 texture = ExtResource("2_tlwt5")
 
@@ -47,14 +39,30 @@ position_smoothing_enabled = true
 script = ExtResource("3_cam")
 player = NodePath("../..")
 
-[node name="Ai" type="CharacterBody2D" parent="." unique_id=1016026690]
-position = Vector2(208, 120)
-script = ExtResource("7_2o6r5")
+[node name="Tiles" type="Node2D" parent="." unique_id=1542097818]
+texture_filter = 1
+script = ExtResource("1_gbfbk")
 
-[node name="CollisionShape2D" parent="Ai" unique_id=1266509224 instance=ExtResource("7_ic0uy")]
-position = Vector2(0, 20)
+[node name="TileMapLayerZ2" type="TileMapLayer" parent="Tiles" unique_id=1878963269]
+tile_map_data = PackedByteArray("AAAFAAgAAAAIAAMAAAASAAgAAAAIAAMAAAATAAgAAAAIAAMAAAAUAAgAAAAIAAMAAAAVAAgAAAAIAAMAAAAVAAkAAAACAAEAAAABAAkAAAACAAEAAAACAAkAAAACAAEAAAADAAkAAAACAAEAAAAEAAkAAAACAAEAAAAFAAkAAAACAAEAAAAGAAkAAAACAAEAAAAHAAkAAAACAAEAAAAIAAkAAAACAAEAAAAJAAkAAAACAAEAAAAKAAkAAAACAAEAAAALAAkAAAACAAEAAAAMAAkAAAACAAEAAAANAAkAAAACAAEAAAAOAAkAAAACAAEAAAAPAAkAAAACAAEAAAAQAAkAAAACAAEAAAARAAkAAAACAAEAAAASAAkAAAACAAEAAAATAAkAAAACAAEAAAAUAAkAAAACAAEAAAAWAAAAAAAEAAUAAAAWAAEAAAAEAAUAAAAWAAIAAAAEAAUAAAAWAAMAAAAEAAUAAAAWAAQAAAAEAAUAAAAWAAUAAAAEAAUAAAAWAAYAAAAEAAUAAAAWAAcAAAAEAAUAAAAWAAgAAAAEAAUAAAAWAAkAAAAEAAUAAAAAAAkAAAAEAAUAAAAAAAgAAAAEAAUAAAAAAAcAAAAEAAUAAAAAAAYAAAAEAAUAAAAAAAUAAAAEAAUAAAAAAAQAAAAEAAUAAAAAAAEAAAAEAAUAAAAAAAAAAAAEAAUAAAAAAAIAAAAEAAUAAAAAAAMAAAAEAAUAAAACAAgAAAALAAcAAAA=")
+tile_set = ExtResource("1_fj7yv")
+script = ExtResource("4_70uel")
 
-[node name="Sprite2D" type="Sprite2D" parent="Ai/CollisionShape2D" unique_id=1862886783]
+[node name="Ai" type="CharacterBody2D" parent="." unique_id=1016026690 node_paths=PackedStringArray("tile")]
+scale = Vector2(0.8, 0.8)
+up_direction = Vector2(0, 1)
+script = ExtResource("8_70uel")
+tile = NodePath("../Tiles/TileMapLayerZ2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ai" unique_id=1266509224]
+position = Vector2(-99.99999, 29.999996)
+shape = SubResource("RectangleShape2D_dlai5")
+
+[node name="Icon" type="Sprite2D" parent="Ai/CollisionShape2D" unique_id=1650189265]
+modulate = Color(0.56078434, 0.023529412, 0, 1)
+position = Vector2(-1.1444092e-05, 0)
+scale = Vector2(0.15625001, 0.14843749)
+texture = ExtResource("2_tlwt5")
 
 [node name="Camera2D" type="Camera2D" parent="Ai/CollisionShape2D" unique_id=1449312901]
 zoom = Vector2(3, 3)
@@ -79,9 +87,9 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 6.0
-anchor_top = 2.6
+anchor_top = 3.4
 anchor_right = 8.3
-anchor_bottom = 3.175
+anchor_bottom = 3.975
 offset_right = 8.0
 offset_bottom = 8.0
 text = "Start-player"

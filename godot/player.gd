@@ -144,12 +144,14 @@ func _spike_damage_rect_local(layer: TileMapLayer, cell: Vector2i) -> Rect2:
 
 
 func _on_main_menu_reset(type) -> void:
-	position.x = 208
-	position.y = 120
 	if type == "player":
 		play = true
+		position.x = 208
+		position.y = 120
 	else:
 		play = false
+		position.x = 1000
+		position.y = 1000
 	for x in saved_deleted_tiles:
 		_tile_layer.set_cell(x,0,REMOVABLE_ATLAS,0)
 	saved_deleted_tiles = []
