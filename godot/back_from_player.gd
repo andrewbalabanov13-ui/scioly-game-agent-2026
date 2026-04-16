@@ -1,9 +1,10 @@
-extends Button
+extends Control
 @onready var should_hide = get_parent().start_player_button_hide
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	hide() # Replace with function body.
+	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -13,8 +14,5 @@ func _process(delta: float) -> void:
 		hide()
 	else:
 		show()
-
-
-func _on_player_menu_pressed() -> void:
-	show() # Replace with function body.
-	print("pressed")
+		
+		

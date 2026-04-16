@@ -11,7 +11,7 @@ func _process(delta: float) -> void:
 	pass
 
 func _on_main_menu_reset(type: Variant) -> void:
-	if type == "ai":
+	if type == "ai_play" or type == "ai_train":
 		self.enabled = true
 	else:
 		self.enabled = false

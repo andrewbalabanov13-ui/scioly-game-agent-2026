@@ -14,21 +14,29 @@ const TILEMULTIPLIER = 1
 const TILE_SIZE = 18
 const EPSILON_VALUE = 0.05
 const ALTHA = 0.1
+const BASE_TICKS := 60
+
 ## Caps integration step for train/move. Without this, large Engine.time_scale makes delta huge and physics explodes.
 const MAX_PHYSICS_SUBSTEP := 1.0 / 120.0
 @export var tile: TileMapLayer
 
+
+func set_game_speed(scale: float):
+	scale = clamp(scale, 0.25, 2.0)    
+	Engine.time_scale = scale
+	Engine.physics_ticks_per_second = int(BASE_TICKS / scale)
+
 func _ready() -> void:
-	pass
+	hide()
 	
 func get_reward(row,col):
 	var block = world[row][col]
 	if is_on_wall():
-		return Vector2i(-1000,1)
+		return Vector2i(-10,1)
 	if block == "s":
-		return Vector2i(-100,2)
+		return Vector2i(-1000,2)
 	if block == "c":
-		return Vector2i(100,3)
+		return Vector2i(1000,3)
 	return Vector2i(-1,1)
 
 func make_world():
@@ -93,9 +101,28 @@ func move(delta,dir):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	move_and_slide()
+func get_action(state, is_train):
+	var b = -99999999
+	var index = 0
+	if is_train and randf() < EPSILON_VALUE:
+		index = randi_range(0,2)
+		#chooses a random number between 0-2
+		#possible choises include: 0,1,2
+		#number tells the direction of ai
+		#0 = right
+		#1 = left
+		#2 = up
+	else:
+		for x in range(len(q_table[state])):
+			if q_table[state][x] > b:
+				b = q_table[state][x]
+				index = x
+	return index
+	
+	
+
 
 func train(posx,posy,delta):
-
 	var pos = get_row_and_col()
 	var row = pos.x
 	var col = pos.y
@@ -113,28 +140,14 @@ func train(posx,posy,delta):
 			var TD = (reward + new_actions.max()) - q_table[last_state][action]
 			q_table[last_state][action] = q_table[last_state][action] + (ALTHA * TD)
 			if stop in [2,3]:
-				#if stop == 2:
-					#print('you lose')
-				#elif stop == 3:
-					#print('you win')
+				if stop == 2:
+					print('you lose')
+				elif stop == 3:
+					print('you win')
 				reset()
 				episode_amount += 1
 				return 
-		
-		if randf() < EPSILON_VALUE:
-			action = randi_range(0,2)
-			#chooses a random number between 0-2
-			#possible choises include: 0,1,2
-			#number tells the direction of ai
-			#0 = right
-			#1 = left
-			#2 = up
-		else:
-			for x in range(len(q_table[state])):
-				if q_table[state][x] > b:
-					b = q_table[state][x]
-					index = x
-			action = index
+			action = get_action(state,true)
 		last_state = state
 	
 	move(delta,action)
@@ -142,45 +155,51 @@ func train(posx,posy,delta):
 	row = pos.x
 	col = pos.y
 	if is_on_wall():
-		if randf() < EPSILON_VALUE:
-			action = randi_range(0,2)
-			#chooses a random number between 0-2
-			#possible choises include: 0,1,2
-			#number tells the direction of ai
-			#0 = right
-			#1 = left
-			#2 = up
-		else:
-			for x in range(len(q_table[state])):
-				if q_table[state][x] > b:
-					b = q_table[state][x]
-					index = x
-			action = index
+		action = get_action(state,true)
 		
 func _physics_process(delta: float) -> void:
 	if not play:
 		return
 	if robot_training_mode == 0:
 		if episode_amount < 1000:
-			Engine.time_scale = 1000
-			var steps: int = maxi(1, ceili(delta / MAX_PHYSICS_SUBSTEP))
-			var sub_delta: float = delta / float(steps)
-			for _i in range(steps):
-				train(position.x, position.y, sub_delta)
+			set_game_speed(100)
+			for x in range(100):
+				var steps: int = maxi(1, ceili(delta / MAX_PHYSICS_SUBSTEP))
+				var sub_delta: float = delta / float(steps)
+				for _i in range(steps):
+					train(position.x, position.y, sub_delta)
 		else:
-			Engine.time_scale = 1
-			print("done")
+			set_game_speed(1)
+			position.x = 208
+			position.y = 120
+			robot_training_mode = 1
+			print(q_table)
+			
+			
 	if robot_training_mode == 1:
-		pass
+		set_game_speed(1)
+		run_ai(delta)
+
+func run_ai(delta):
+	var pos = get_row_and_col()
+	var row = pos.x
+	var col = pos.y
+	var state = get_state(row,col)
+	var run_action = get_action(state,false)
+	move(delta,run_action)
+
 
 func _on_main_menu_reset(type: Variant) -> void:
-	if type == "ai":
+	if type == "ai_train":
 		play = true
+		show()
 		robot_training_mode = 0
 		position.x = 208
 		position.y = 120
 		world = make_world()
 		make_q_table()
+	elif type == "ai_play":
+		robot_training_mode = 1
 	else:
 		play = false
 		position.x = 1000

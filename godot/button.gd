@@ -2,7 +2,7 @@ extends Button
 @onready var button_hide = get_node("../../MainMenu").DeathButtonHide
 
 func _ready() -> void:
-	pass
+	hide()
 
 func _on_pressed() -> void:
 	pass
