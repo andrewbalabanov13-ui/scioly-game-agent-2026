@@ -5,6 +5,7 @@ signal reset(type)
 @export var UiDeath = Control
 
 @export var menu := true
+@export var ui_win_retry := Button
 @export var player: Player
 @export var DeathButtonHide := true
 @export var start_player_button_hide := true
@@ -16,6 +17,7 @@ var prev_death = false
 @onready var ui_death: Control = get_node("../UiDeath")
 @onready var restart_lose: Button = get_node("../UiDeath/Restart")
 @onready var ui_win: Control = get_parent().get_node("UiWin")
+
 
 func _ready() -> void:
 	ui_death.visible = false
@@ -32,6 +34,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		DeathButtonHide = true
 		ui_death.visible = false
+	
 
 
 
@@ -113,3 +116,20 @@ func _on_ai_ai_play_done(type: Variant,reset_type) -> void:
 	if type == "win":
 		ui_win.visible = true
 		ui_death.visible = false
+
+
+func _on_retry_pressed() -> void:
+	player.death = false
+	menu = false
+	ui_win.visible = false
+	emit_signal("reset",ui_win_retry.reset_type)
+	print(ui_win_retry.reset_type)
+
+
+func _on_go_back_to_main_menu_pressed() -> void:
+	menu = true
+	AiMenuHide = false
+	PlayerMenuHide = false
+	ai_hide = true
+	ui_win.visible = false
+	player.death = false

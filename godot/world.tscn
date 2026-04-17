@@ -20,6 +20,7 @@
 [ext_resource type="Script" uid="uid://yl3qccikyhtj" path="res://restart_player.gd" id="18_ikiii"]
 [ext_resource type="Script" uid="uid://bj0ybi5vxjos2" path="res://ui_win.gd" id="19_26xuy"]
 [ext_resource type="Script" uid="uid://vw1uik1lapom" path="res://control.gd" id="19_cbp6q"]
+[ext_resource type="Script" uid="uid://ch3h1wjxqnf6p" path="res://retry_ui_win.gd" id="20_bc84e"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aqk2v"]
 
@@ -83,7 +84,7 @@ script = ExtResource("8_k3n1d")
 [node name="Ui - main menu" type="CanvasLayer" parent="." unique_id=1004998110]
 layer = 20
 
-[node name="MainMenu" type="Control" parent="Ui - main menu" unique_id=1593517756 node_paths=PackedStringArray("UiDeath", "player")]
+[node name="MainMenu" type="Control" parent="Ui - main menu" unique_id=1593517756 node_paths=PackedStringArray("UiDeath", "ui_win_retry", "player")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -92,6 +93,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("8_gbfbk")
 UiDeath = NodePath("../UiDeath")
+ui_win_retry = NodePath("../UiWin/retry")
 player = NodePath("../../Player")
 metadata/_edit_use_anchors_ = true
 
@@ -235,15 +237,19 @@ text = "$self is not defined or not made"
 [node name="go_back_to_main_menu" type="Button" parent="Ui - main menu/UiWin" unique_id=1183160434]
 layout_mode = 0
 offset_left = 476.0
-offset_top = 250.0
+offset_top = 300.0
 offset_right = 676.0
-offset_bottom = 300.0
+offset_bottom = 350.0
 text = "go back to menu"
 
 [node name="retry" type="Button" parent="Ui - main menu/UiWin" unique_id=422775505]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+layout_mode = 1
+offset_left = 476.0
+offset_top = 250.0
+offset_right = 676.0
+offset_bottom = 300.0
+text = "Retry"
+script = ExtResource("20_bc84e")
 
 [node name="Ui-Show_on_screen" type="CanvasLayer" parent="." unique_id=1335012660]
 
@@ -292,6 +298,7 @@ text = "go  back to main menu"
 [connection signal="create_states" from="Tiles/TileMapLayerZ2" to="Ai" method="_on_tile_map_layer_z_2_create_states"]
 [connection signal="ai_play_done" from="Ai" to="Ui - main menu/MainMenu" method="_on_ai_ai_play_done"]
 [connection signal="ai_play_done" from="Ai" to="Ui - main menu/UiDeath/Restart" method="_on_ai_ai_play_done"]
+[connection signal="ai_play_done" from="Ai" to="Ui - main menu/UiWin/retry" method="_on_ai_ai_play_done"]
 [connection signal="ai_training_done" from="Ai" to="Ui-Show_on_screen/training_done" method="_on_ai_ai_training_done"]
 [connection signal="reset" from="Ui - main menu/MainMenu" to="Player" method="_on_main_menu_reset"]
 [connection signal="reset" from="Ui - main menu/MainMenu" to="Player/CollisionShape2D/Camera2D" method="_on_main_menu_reset"]
@@ -308,6 +315,8 @@ text = "go  back to main menu"
 [connection signal="pressed" from="Ui - main menu/MainMenu/back_from_ai_menu" to="Ui - main menu/MainMenu" method="_on_back_from_ai_menu_pressed"]
 [connection signal="pressed" from="Ui - main menu/UiDeath/Button" to="Ui - main menu/MainMenu" method="_on_death_button_pressed"]
 [connection signal="pressed" from="Ui - main menu/UiDeath/Restart" to="Ui - main menu/MainMenu" method="_on_restart_player_pressed"]
+[connection signal="pressed" from="Ui - main menu/UiWin/go_back_to_main_menu" to="Ui - main menu/MainMenu" method="_on_go_back_to_main_menu_pressed"]
+[connection signal="pressed" from="Ui - main menu/UiWin/retry" to="Ui - main menu/MainMenu" method="_on_retry_pressed"]
 [connection signal="pressed" from="Ui - main menu/UiWin/retry" to="Ui - main menu/UiWin" method="_on_retry_pressed"]
 [connection signal="pressed" from="Ui-Show_on_screen/training_done/training_done_button" to="Ui - main menu/MainMenu" method="_on_training_done_button_pressed"]
 [connection signal="pressed" from="Ui-Show_on_screen/training_done/training_done_button" to="Ui-Show_on_screen/training_done" method="_on_training_done_button_pressed"]

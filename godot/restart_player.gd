@@ -17,4 +17,5 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_ai_ai_play_done(type: Variant,playAs) -> void:
-	reset_type = playAs # Replace with function body.
+	if type == "lose":
+		reset_type = playAs # Replace with function body.

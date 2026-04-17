@@ -217,7 +217,7 @@ func _on_main_menu_reset(type: Variant) -> void:
 		position.x = 250
 		position.y = 120
 		world = make_world()
-		
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 		make_q_table()
 		set_game_speed(100000)
 
@@ -231,6 +231,8 @@ func _on_main_menu_reset(type: Variant) -> void:
 			world = make_world()
 		show()
 		set_game_speed(1)
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ADAPTIVE)
+
 
 	else:
 		play = false
