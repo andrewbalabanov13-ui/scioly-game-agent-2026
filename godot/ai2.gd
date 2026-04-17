@@ -16,15 +16,20 @@ const EPSILON_VALUE = 0.05
 const ALTHA = 0.1
 const BASE_TICKS := 60
 
+signal ai_training_done 
+signal ai_play_done(type,playAs)
+
+@export var player: CharacterBody2D
+@export var main_menu: Control
+
 ## Caps integration step for train/move. Without this, large Engine.time_scale makes delta huge and physics explodes.
 const MAX_PHYSICS_SUBSTEP := 1.0 / 120.0
 @export var tile: TileMapLayer
 
 
 func set_game_speed(scale: float):
-	scale = clamp(scale, 0.25, 2.0)    
 	Engine.time_scale = scale
-	Engine.physics_ticks_per_second = int(BASE_TICKS / scale)
+	Engine.physics_ticks_per_second = int(BASE_TICKS * scale)
 
 func _ready() -> void:
 	hide()
@@ -32,10 +37,12 @@ func _ready() -> void:
 func get_reward(row,col):
 	var block = world[row][col]
 	if is_on_wall():
-		return Vector2i(-10,1)
+		return Vector2i(-5,1)
 	if block == "s":
 		return Vector2i(-1000,2)
 	if block == "c":
+		return Vector2i(100,1)
+	if block == "f":
 		return Vector2i(1000,3)
 	return Vector2i(-1,1)
 
@@ -63,6 +70,9 @@ func make_world():
 				row.append("c")
 				#coin
 				continue
+			if cell_type == Vector2i(12,5):
+				row.append("f")
+				#flag
 		world.append(row)
 	return world
 
@@ -81,7 +91,7 @@ func get_state(row,col):
 	return row* tile.width_in_tiles + col
 
 func reset():
-	position.x = 208
+	position.x = 250
 	position.y = 120
 	
 func move(delta,dir):
@@ -140,10 +150,10 @@ func train(posx,posy,delta):
 			var TD = (reward + new_actions.max()) - q_table[last_state][action]
 			q_table[last_state][action] = q_table[last_state][action] + (ALTHA * TD)
 			if stop in [2,3]:
-				if stop == 2:
-					print('you lose')
-				elif stop == 3:
-					print('you win')
+				#if stop == 2:
+					#print('you lose')
+				#elif stop == 3:
+					#print('you win')
 				reset()
 				episode_amount += 1
 				return 
@@ -161,23 +171,19 @@ func _physics_process(delta: float) -> void:
 	if not play:
 		return
 	if robot_training_mode == 0:
-		if episode_amount < 1000:
-			set_game_speed(100)
-			for x in range(100):
+		if episode_amount < 10000:
+			for x in range(500):
 				var steps: int = maxi(1, ceili(delta / MAX_PHYSICS_SUBSTEP))
 				var sub_delta: float = delta / float(steps)
 				for _i in range(steps):
 					train(position.x, position.y, sub_delta)
 		else:
-			set_game_speed(1)
-			position.x = 208
-			position.y = 120
-			robot_training_mode = 1
-			print(q_table)
+			emit_signal("ai_training_done")
+			episode_amount = 0
+			robot_training_mode = -1
+			hide()
 			
-			
-	if robot_training_mode == 1:
-		set_game_speed(1)
+	elif robot_training_mode == 1:
 		run_ai(delta)
 
 func run_ai(delta):
@@ -186,6 +192,19 @@ func run_ai(delta):
 	var col = pos.y
 	var state = get_state(row,col)
 	var run_action = get_action(state,false)
+	var reward_and_stop = get_reward(row,col)
+	var stop = reward_and_stop.y
+	if stop in [2,3]:
+		if stop == 2:
+			#print("you lose")
+			emit_signal("ai_play_done","lose","ai_play")
+			player.death = true
+		elif stop == 3:
+			#print("you win")
+			emit_signal("ai_play_done","win","ai_play")
+		main_menu.menu = true
+		hide()
+		
 	move(delta,run_action)
 
 
@@ -194,14 +213,28 @@ func _on_main_menu_reset(type: Variant) -> void:
 		play = true
 		show()
 		robot_training_mode = 0
-		position.x = 208
+		episode_amount = 0
+		position.x = 250
 		position.y = 120
 		world = make_world()
+		
 		make_q_table()
+		set_game_speed(100000)
+
 	elif type == "ai_play":
+		play = true
 		robot_training_mode = 1
+		position.x = 250
+		position.y = 120
+		if q_table == []:
+			make_q_table()
+			world = make_world()
+		show()
+		set_game_speed(1)
+
 	else:
 		play = false
 		position.x = 1000
 		position.y = 1000
+		set_game_speed(1)
 		

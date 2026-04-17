@@ -16,6 +16,7 @@ var saved_deleted_tiles = []
 @onready var _tile_layer: TileMapLayer = get_node("../Tiles/TileMapLayerZ2")
 @onready var menu = get_node("../Ui - main menu/MainMenu").menu
 
+signal player_play_done(type,playAs)
 signal player_position
 func _ready() -> void:
 	hide()
@@ -67,12 +68,12 @@ func _erase_touching_removable_tiles() -> void:
 				_tile_layer.erase_cell(cell)
 				saved_deleted_tiles.append(cell)
 				score += 1
-				print(score)
 			if _tile_layer.get_cell_atlas_coords(cell) == SPIKE_ATLAS:
 				if game_over:
 					continue
 				if spike_probe.intersects(_spike_damage_rect_local(_tile_layer, cell)):					
 					death = true
+					emit_signal("player_play_done","lose","player")
 
 
 func _player_overlap_cell_bounds(layer: TileMapLayer) -> Rect2i:

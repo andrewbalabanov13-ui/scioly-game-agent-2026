@@ -2,7 +2,6 @@
 
 [ext_resource type="TileSet" uid="uid://umape1tfhyj1" path="res://Tiles1.tres" id="1_fj7yv"]
 [ext_resource type="Script" uid="uid://dayi50rgrh51x" path="res://tiles.gd" id="1_gbfbk"]
-[ext_resource type="Script" uid="uid://d0nhl0c06ortq" path="res://world.gd" id="1_wse8f"]
 [ext_resource type="Script" uid="uid://80kl10p8d3vr" path="res://player.gd" id="2_aqk2v"]
 [ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="2_tlwt5"]
 [ext_resource type="Script" uid="uid://boa5scnw8xkf7" path="res://camera_2d.gd" id="3_cam"]
@@ -17,6 +16,10 @@
 [ext_resource type="Script" uid="uid://dpk1d5b0doe8b" path="res://player_menu.gd" id="11_70uel"]
 [ext_resource type="Script" uid="uid://bt3ij70bebk4g" path="res://start_ai_button.gd" id="11_udxuc"]
 [ext_resource type="Script" uid="uid://b857ltlrkrxlx" path="res://ai_menu.gd" id="14_2u3nc"]
+[ext_resource type="Script" uid="uid://u0r6bm5c6v5p" path="res://back_from_ai_menu.gd" id="15_cbp6q"]
+[ext_resource type="Script" uid="uid://yl3qccikyhtj" path="res://restart_player.gd" id="18_ikiii"]
+[ext_resource type="Script" uid="uid://bj0ybi5vxjos2" path="res://ui_win.gd" id="19_26xuy"]
+[ext_resource type="Script" uid="uid://vw1uik1lapom" path="res://control.gd" id="19_cbp6q"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aqk2v"]
 
@@ -26,9 +29,9 @@ size = Vector2(20, 19)
 [sub_resource type="Theme" id="Theme_2o6r5"]
 
 [node name="World" type="Node2D" unique_id=785273351]
-script = ExtResource("1_wse8f")
 
 [node name="Player" type="CharacterBody2D" parent="." unique_id=1958510504]
+scale = Vector2(0.8, 0.8)
 script = ExtResource("2_aqk2v")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=535973161]
@@ -50,12 +53,14 @@ texture_filter = 1
 script = ExtResource("1_gbfbk")
 
 [node name="TileMapLayerZ2" type="TileMapLayer" parent="Tiles" unique_id=1878963269]
-tile_map_data = PackedByteArray("AAAFAAgAAAAIAAMAAAASAAgAAAAIAAMAAAATAAgAAAAIAAMAAAAUAAgAAAAIAAMAAAAVAAgAAAAIAAMAAAAVAAkAAAACAAEAAAABAAkAAAACAAEAAAACAAkAAAACAAEAAAADAAkAAAACAAEAAAAEAAkAAAACAAEAAAAFAAkAAAACAAEAAAAGAAkAAAACAAEAAAAHAAkAAAACAAEAAAAIAAkAAAACAAEAAAAJAAkAAAACAAEAAAAKAAkAAAACAAEAAAALAAkAAAACAAEAAAAMAAkAAAACAAEAAAANAAkAAAACAAEAAAAOAAkAAAACAAEAAAAPAAkAAAACAAEAAAAQAAkAAAACAAEAAAARAAkAAAACAAEAAAASAAkAAAACAAEAAAATAAkAAAACAAEAAAAUAAkAAAACAAEAAAAWAAAAAAAEAAUAAAAWAAEAAAAEAAUAAAAWAAIAAAAEAAUAAAAWAAMAAAAEAAUAAAAWAAQAAAAEAAUAAAAWAAUAAAAEAAUAAAAWAAYAAAAEAAUAAAAWAAcAAAAEAAUAAAAWAAgAAAAEAAUAAAAWAAkAAAAEAAUAAAAAAAkAAAAEAAUAAAAAAAgAAAAEAAUAAAAAAAcAAAAEAAUAAAAAAAYAAAAEAAUAAAAAAAUAAAAEAAUAAAAAAAQAAAAEAAUAAAAAAAEAAAAEAAUAAAAAAAAAAAAEAAUAAAAAAAIAAAAEAAUAAAAAAAMAAAAEAAUAAAACAAgAAAALAAcAAAABAAAAAAAEAAUAAAACAAAAAAAEAAUAAAADAAAAAAAEAAUAAAAEAAAAAAAEAAUAAAAFAAAAAAAEAAUAAAAGAAAAAAAEAAUAAAAHAAAAAAAEAAUAAAAIAAAAAAAEAAUAAAAJAAAAAAAEAAUAAAAKAAAAAAAEAAUAAAALAAAAAAAEAAUAAAAMAAAAAAAEAAUAAAANAAAAAAAEAAUAAAAOAAAAAAAEAAUAAAAPAAAAAAAEAAUAAAAQAAAAAAAEAAUAAAARAAAAAAAEAAUAAAASAAAAAAAEAAUAAAATAAAAAAAEAAUAAAAUAAAAAAAEAAUAAAAVAAAAAAAEAAUAAAA=")
+tile_map_data = PackedByteArray("AAAFAAgAAAAIAAMAAAASAAgAAAAIAAMAAAATAAgAAAAIAAMAAAAUAAgAAAAIAAMAAAAVAAgAAAAIAAMAAAAVAAkAAAACAAEAAAACAAkAAAACAAEAAAADAAkAAAACAAEAAAAEAAkAAAACAAEAAAAFAAkAAAACAAEAAAAGAAkAAAACAAEAAAAHAAkAAAACAAEAAAAIAAkAAAACAAEAAAAJAAkAAAACAAEAAAAKAAkAAAACAAEAAAALAAkAAAACAAEAAAAMAAkAAAACAAEAAAANAAkAAAACAAEAAAAOAAkAAAACAAEAAAAPAAkAAAACAAEAAAAQAAkAAAACAAEAAAARAAkAAAACAAEAAAASAAkAAAACAAEAAAATAAkAAAACAAEAAAAUAAkAAAACAAEAAAAWAAAAAAAEAAUAAAAWAAEAAAAEAAUAAAAWAAIAAAAEAAUAAAAWAAMAAAAEAAUAAAAWAAQAAAAEAAUAAAAWAAUAAAAEAAUAAAAWAAYAAAAEAAUAAAAWAAcAAAAEAAUAAAAWAAgAAAAEAAUAAAAWAAkAAAAEAAUAAAAAAAkAAAAEAAUAAAAAAAgAAAAEAAUAAAAAAAcAAAAEAAUAAAAAAAYAAAAEAAUAAAAAAAUAAAAEAAUAAAAAAAQAAAAEAAUAAAAAAAEAAAAEAAUAAAAAAAAAAAAEAAUAAAAAAAIAAAAEAAUAAAAAAAMAAAAEAAUAAAABAAAAAAAEAAUAAAACAAAAAAAEAAUAAAADAAAAAAAEAAUAAAAEAAAAAAAEAAUAAAAFAAAAAAAEAAUAAAAGAAAAAAAEAAUAAAAIAAAAAAAEAAUAAAAJAAAAAAAEAAUAAAAKAAAAAAAEAAUAAAALAAAAAAAEAAUAAAAMAAAAAAAEAAUAAAANAAAAAAAEAAUAAAAOAAAAAAAEAAUAAAAPAAAAAAAEAAUAAAAQAAAAAAAEAAUAAAARAAAAAAAEAAUAAAASAAAAAAAEAAUAAAATAAAAAAAEAAUAAAAUAAAAAAAEAAUAAAAVAAAAAAAEAAUAAAABAAkAAAAEAAUAAAABAAgAAAAEAAUAAAABAAcAAAAEAAUAAAABAAYAAAAEAAUAAAADAAYAAAAEAAUAAAADAAUAAAAEAAUAAAADAAQAAAAEAAUAAAACAAMAAAAEAAUAAAADAAMAAAAEAAUAAAAEAAMAAAAEAAUAAAAFAAMAAAAEAAUAAAAGAAMAAAAEAAUAAAAHAAMAAAAEAAUAAAAIAAMAAAAEAAUAAAAHAAAAAAAEAAUAAAAJAAMAAAAEAAUAAAAKAAMAAAAEAAUAAAALAAMAAAAEAAUAAAAMAAMAAAAEAAUAAAANAAMAAAAEAAUAAAAOAAMAAAAEAAUAAAAOAAIAAAAMAAUAAAAPAAMAAAAEAAUAAAAPAAIAAAAEAAUAAAAPAAEAAAAEAAUAAAAGAAgAAAAIAAMAAAAHAAgAAAAIAAMAAAA=")
 tile_set = ExtResource("1_fj7yv")
 script = ExtResource("4_70uel")
 
-[node name="Ai" type="CharacterBody2D" parent="." unique_id=1016026690 node_paths=PackedStringArray("tile")]
+[node name="Ai" type="CharacterBody2D" parent="." unique_id=1016026690 node_paths=PackedStringArray("player", "main_menu", "tile")]
 script = ExtResource("8_70uel")
+player = NodePath("../Player")
+main_menu = NodePath("../Ui - main menu/MainMenu")
 tile = NodePath("../Tiles/TileMapLayerZ2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ai" unique_id=1266509224]
@@ -70,14 +75,15 @@ texture = ExtResource("2_tlwt5")
 
 [node name="Camera2D" type="Camera2D" parent="Ai/CollisionShape2D" unique_id=1449312901]
 zoom = Vector2(3, 3)
-position_smoothing_enabled = true
-position_smoothing_speed = 0.0
+limit_enabled = false
+position_smoothing_speed = 1000.0
+rotation_smoothing_speed = 1000.0
 script = ExtResource("8_k3n1d")
 
 [node name="Ui - main menu" type="CanvasLayer" parent="." unique_id=1004998110]
 layer = 20
 
-[node name="MainMenu" type="Control" parent="Ui - main menu" unique_id=1593517756 node_paths=PackedStringArray("player")]
+[node name="MainMenu" type="Control" parent="Ui - main menu" unique_id=1593517756 node_paths=PackedStringArray("UiDeath", "player")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -85,16 +91,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("8_gbfbk")
+UiDeath = NodePath("../UiDeath")
 player = NodePath("../../Player")
 metadata/_edit_use_anchors_ = true
 
 [node name="train-aiButton" type="Button" parent="Ui - main menu/MainMenu" unique_id=81656691]
 layout_mode = 1
 anchors_preset = -1
-offset_left = 500.0
+offset_left = 476.0
 offset_top = 300.0
-offset_right = 700.0
-offset_bottom = 331.0
+offset_right = 676.0
+offset_bottom = 350.0
 text = "Train Ai"
 script = ExtResource("11_udxuc")
 metadata/_edit_use_anchors_ = true
@@ -142,11 +149,20 @@ script = ExtResource("14_2u3nc")
 [node name="start-aiButton" type="Button" parent="Ui - main menu/MainMenu" unique_id=2013874619]
 layout_mode = 1
 offset_left = 476.0
-offset_top = 250.0
+offset_top = 220.0
 offset_right = 676.0
-offset_bottom = 300.0
+offset_bottom = 270.0
 text = "play-ai"
 script = ExtResource("11_udxuc")
+
+[node name="back_from_ai_menu" type="Button" parent="Ui - main menu/MainMenu" unique_id=1627482850]
+layout_mode = 1
+offset_left = 476.0
+offset_top = 380.0
+offset_right = 676.0
+offset_bottom = 430.0
+text = "Go back"
+script = ExtResource("15_cbp6q")
 
 [node name="UiDeath" type="Control" parent="Ui - main menu" unique_id=1176597002]
 visible = false
@@ -185,7 +201,98 @@ text = "Go back to main menu"
 script = ExtResource("9_wse8f")
 metadata/_edit_use_anchors_ = true
 
+[node name="Restart" type="Button" parent="Ui - main menu/UiDeath" unique_id=1132481807]
+layout_mode = 0
+offset_left = 416.0
+offset_top = 350.0
+offset_right = 736.0
+offset_bottom = 406.0
+text = "Restart"
+script = ExtResource("18_ikiii")
+
+[node name="Label" type="Label" parent="Ui - main menu/UiDeath" unique_id=1177638349]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "$self from main is not found"
+
+[node name="UiWin" type="Control" parent="Ui - main menu" unique_id=1440135688]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("19_26xuy")
+
+[node name="Label" type="Label" parent="Ui - main menu/UiWin" unique_id=1300923088]
+layout_mode = 1
+offset_left = 576.0
+offset_top = 250.0
+offset_right = 822.0
+offset_bottom = 450.0
+localize_numeral_system = false
+text = "$self is not defined or not made"
+
+[node name="go_back_to_main_menu" type="Button" parent="Ui - main menu/UiWin" unique_id=1183160434]
+layout_mode = 0
+offset_left = 476.0
+offset_top = 250.0
+offset_right = 676.0
+offset_bottom = 300.0
+text = "go back to menu"
+
+[node name="retry" type="Button" parent="Ui - main menu/UiWin" unique_id=422775505]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="Ui-Show_on_screen" type="CanvasLayer" parent="." unique_id=1335012660]
+
+[node name="training_done" type="Control" parent="Ui-Show_on_screen" unique_id=201513988]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("19_cbp6q")
+
+[node name="training_done_label" type="Label" parent="Ui-Show_on_screen/training_done" unique_id=1107808789]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -100.0
+offset_right = 100.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Training done!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="training_done_button" type="Button" parent="Ui-Show_on_screen/training_done" unique_id=662290082]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -130.0
+offset_top = 120.0
+offset_right = 130.0
+offset_bottom = 168.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "go  back to main menu"
+
+[connection signal="player_play_done" from="Player" to="Ui - main menu/UiDeath/Restart" method="_on_ai_ai_play_done"]
 [connection signal="create_states" from="Tiles/TileMapLayerZ2" to="Ai" method="_on_tile_map_layer_z_2_create_states"]
+[connection signal="ai_play_done" from="Ai" to="Ui - main menu/MainMenu" method="_on_ai_ai_play_done"]
+[connection signal="ai_play_done" from="Ai" to="Ui - main menu/UiDeath/Restart" method="_on_ai_ai_play_done"]
+[connection signal="ai_training_done" from="Ai" to="Ui-Show_on_screen/training_done" method="_on_ai_ai_training_done"]
 [connection signal="reset" from="Ui - main menu/MainMenu" to="Player" method="_on_main_menu_reset"]
 [connection signal="reset" from="Ui - main menu/MainMenu" to="Player/CollisionShape2D/Camera2D" method="_on_main_menu_reset"]
 [connection signal="reset" from="Ui - main menu/MainMenu" to="Ai" method="_on_main_menu_reset"]
@@ -198,4 +305,9 @@ metadata/_edit_use_anchors_ = true
 [connection signal="pressed" from="Ui - main menu/MainMenu/back_from_player" to="Ui - main menu/MainMenu" method="_on_back_from_player_pressed"]
 [connection signal="pressed" from="Ui - main menu/MainMenu/AiMenu" to="Ui - main menu/MainMenu" method="_on_ai_menu_pressed"]
 [connection signal="pressed" from="Ui - main menu/MainMenu/start-aiButton" to="Ui - main menu/MainMenu" method="_on_startai_button_pressed"]
+[connection signal="pressed" from="Ui - main menu/MainMenu/back_from_ai_menu" to="Ui - main menu/MainMenu" method="_on_back_from_ai_menu_pressed"]
 [connection signal="pressed" from="Ui - main menu/UiDeath/Button" to="Ui - main menu/MainMenu" method="_on_death_button_pressed"]
+[connection signal="pressed" from="Ui - main menu/UiDeath/Restart" to="Ui - main menu/MainMenu" method="_on_restart_player_pressed"]
+[connection signal="pressed" from="Ui - main menu/UiWin/retry" to="Ui - main menu/UiWin" method="_on_retry_pressed"]
+[connection signal="pressed" from="Ui-Show_on_screen/training_done/training_done_button" to="Ui - main menu/MainMenu" method="_on_training_done_button_pressed"]
+[connection signal="pressed" from="Ui-Show_on_screen/training_done/training_done_button" to="Ui-Show_on_screen/training_done" method="_on_training_done_button_pressed"]
