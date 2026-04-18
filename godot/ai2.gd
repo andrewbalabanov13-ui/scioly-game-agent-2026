@@ -15,7 +15,8 @@ const TILE_SIZE = 18
 const EPSILON_VALUE = 0.05
 const ALTHA = 0.1
 const BASE_TICKS := 60
-
+const start_posX = 40
+const start_posY = 120
 signal ai_training_done 
 signal ai_play_done(type,playAs)
 
@@ -99,8 +100,8 @@ func get_state(row,col):
 
 # Teleport agent back to the level start after a terminal RL transition.
 func reset():
-	position.x = 250
-	position.y = 120
+	position.x = start_posX
+	position.y = start_posY
 	
 # Apply gravity, jump, horizontal speed, then collide with the level.
 func move(delta,dir):
@@ -229,8 +230,8 @@ func _on_main_menu_reset(type: Variant) -> void:
 		show()
 		robot_training_mode = 0
 		episode_amount = 0
-		position.x = 250
-		position.y = 120
+		position.x = start_posX
+		position.y = start_posY
 		world = make_world()
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 		make_q_table()
@@ -239,8 +240,8 @@ func _on_main_menu_reset(type: Variant) -> void:
 	elif type == "ai_play":
 		play = true
 		robot_training_mode = 1
-		position.x = 250
-		position.y = 120
+		position.x = start_posX
+		position.y = start_posY
 		if q_table == []:
 			make_q_table()
 			world = make_world()

@@ -1,6 +1,7 @@
 [gd_resource type="TileSet" format=3 uid="uid://umape1tfhyj1"]
 
 [ext_resource type="Texture2D" uid="uid://b8u5sn5ek00kj" path="res://tilemap_packed.png" id="1_1vmpb"]
+[ext_resource type="Texture2D" uid="uid://bx8o4j77ra1ub" path="res://scioly wormhole picture_updated_ping.png" id="2_8vviu"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1vmpb"]
 
@@ -338,8 +339,14 @@ texture_region_size = Vector2i(18, 18)
 18:8/0 = 0
 19:8/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hxgbg"]
+texture = ExtResource("2_8vviu")
+texture_region_size = Vector2i(18, 18)
+0:0/0 = 0
+
 [resource]
 tile_size = Vector2i(18, 18)
 physics_layer_0/collision_layer = 3
 physics_layer_0/physics_material = SubResource("PhysicsMaterial_1vmpb")
 sources/0 = SubResource("TileSetAtlasSource_8vviu")
+sources/3 = SubResource("TileSetAtlasSource_hxgbg")

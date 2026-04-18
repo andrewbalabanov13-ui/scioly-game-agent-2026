@@ -13,6 +13,8 @@ const SPIKE_ATLAS := Vector2i(8,3)
 var game_over = false
 var play = false
 var saved_deleted_tiles = []
+const start_pos_x = 40
+const start_pos_y = 120
 @onready var _tile_layer: TileMapLayer = get_node("../Tiles/TileMapLayerZ2")
 @onready var menu = get_node("../Ui - main menu/MainMenu").menu
 
@@ -162,8 +164,8 @@ func _spike_damage_rect_local(layer: TileMapLayer, cell: Vector2i) -> Rect2:
 func _on_main_menu_reset(type) -> void:
 	if type == "player":
 		play = true
-		position.x = 208
-		position.y = 120
+		position.x = start_pos_x
+		position.y = start_pos_y
 	else:
 		play = false
 		position.x = 1000
