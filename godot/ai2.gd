@@ -12,11 +12,15 @@ const SPEED = 300.0
 const JUMP_VELOCITY = -400
 const TILEMULTIPLIER = 1
 const TILE_SIZE = 18
+#training parameters
 const EPSILON_VALUE = 0.05
 const ALTHA = 0.1
+const NUMEPISODES = 10000
+
 const BASE_TICKS := 60
 const start_posX = 40
 const start_posY = 120
+
 signal ai_training_done 
 signal ai_play_done(type,playAs)
 
@@ -162,10 +166,6 @@ func train(posx,posy,delta):
 			var TD = (reward + new_actions.max()) - q_table[last_state][action]
 			q_table[last_state][action] = q_table[last_state][action] + (ALTHA * TD)
 			if stop in [2,3]:
-				#if stop == 2:
-					#print('you lose')
-				#elif stop == 3:
-					#print('you win')
 				reset()
 				episode_amount += 1
 				return 
@@ -184,7 +184,7 @@ func _physics_process(delta: float) -> void:
 	if not play:
 		return
 	if robot_training_mode == 0:
-		if episode_amount < 10000:
+		if episode_amount < NUMEPISODES:
 			for x in range(500):
 				var steps: int = maxi(1, ceili(delta / MAX_PHYSICS_SUBSTEP))
 				var sub_delta: float = delta / float(steps)
