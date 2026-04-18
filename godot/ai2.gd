@@ -27,13 +27,16 @@ const MAX_PHYSICS_SUBSTEP := 1.0 / 120.0
 @export var tile: TileMapLayer
 
 
+# Scale game time and physics tick rate together (used for fast training vs normal play).
 func set_game_speed(scale: float):
 	Engine.time_scale = scale
 	Engine.physics_ticks_per_second = int(BASE_TICKS * scale)
 
+# Hide the AI agent until a menu mode activates it.
 func _ready() -> void:
 	hide()
 	
+# RL reward and episode outcome for the cell under the agent (walls, spikes, coins, flag).
 func get_reward(row,col):
 	var block = world[row][col]
 	if is_on_wall():
@@ -46,6 +49,7 @@ func get_reward(row,col):
 		return Vector2i(1000,3)
 	return Vector2i(-1,1)
 
+# Build a string grid from the tilemap (wall/spike/coin/flag/empty) for reward lookups.
 func make_world():
 	var world = []
 	for y in tile.height_in_tiles:
@@ -76,24 +80,29 @@ func make_world():
 		world.append(row)
 	return world
 
+# Allocate one Q-value triple per tile for actions left/right/jump.
 func make_q_table():
 	q_table = []
 	for x in tile.width_in_tiles:
 		for y in tile.height_in_tiles:
 			q_table.append([0,0,0])
 
+# Map world position to tile row/column indices.
 func get_row_and_col():
 	var col = floor(position.x / TILE_SIZE) 
 	var row = floor(position.y / TILE_SIZE)
 	return Vector2i(row,col)
 
+# Flatten (row,col) into a single RL state index for the Q-table.
 func get_state(row,col):
 	return row* tile.width_in_tiles + col
 
+# Teleport agent back to the level start after a terminal RL transition.
 func reset():
 	position.x = 250
 	position.y = 120
 	
+# Apply gravity, jump, horizontal speed, then collide with the level.
 func move(delta,dir):
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -111,6 +120,7 @@ func move(delta,dir):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	move_and_slide()
+# Epsilon-greedy (training) or greedy (play) choice of action index 0–2.
 func get_action(state, is_train):
 	var b = -99999999
 	var index = 0
@@ -132,6 +142,7 @@ func get_action(state, is_train):
 	
 
 
+# One RL step: TD update on state change, optional episode reset, then move with current action.
 func train(posx,posy,delta):
 	var pos = get_row_and_col()
 	var row = pos.x
@@ -167,6 +178,7 @@ func train(posx,posy,delta):
 	if is_on_wall():
 		action = get_action(state,true)
 		
+# Drive training (many substeps) or inference depending on robot_training_mode.
 func _physics_process(delta: float) -> void:
 	if not play:
 		return
@@ -186,6 +198,7 @@ func _physics_process(delta: float) -> void:
 	elif robot_training_mode == 1:
 		run_ai(delta)
 
+# Play mode: pick greedy action from Q-table, detect win/lose tiles, then move.
 func run_ai(delta):
 	var pos = get_row_and_col()
 	var row = pos.x
@@ -202,12 +215,14 @@ func run_ai(delta):
 		elif stop == 3:
 			#print("you win")
 			emit_signal("ai_play_done","win","ai_play")
+		robot_training_mode = -1
 		main_menu.menu = true
 		hide()
 		
 	move(delta,run_action)
 
 
+# Start/stop AI training or play from main menu; reset position, Q-table, and time scale.
 func _on_main_menu_reset(type: Variant) -> void:
 	if type == "ai_train":
 		play = true

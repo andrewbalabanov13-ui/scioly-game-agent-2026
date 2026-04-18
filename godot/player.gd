@@ -18,12 +18,14 @@ var saved_deleted_tiles = []
 
 signal player_play_done(type,playAs)
 signal player_position
+# Player starts hidden until the menu starts a run.
 func _ready() -> void:
 	hide()
 	
+	
 
 
-
+# Movement, gravity, tile interactions, and position broadcast while a run is active.
 func _physics_process(delta: float) -> void:
 	emit_signal("player_position",position.x,position.y)
 	menu = get_node("../Ui - main menu/MainMenu").menu
@@ -54,6 +56,7 @@ func _physics_process(delta: float) -> void:
 
 
 
+# Scan tiles under the hitbox: collect coins, detect flag win, and spike death with a foot probe.
 func _erase_touching_removable_tiles() -> void:
 	if _tile_layer == null:
 		return
@@ -64,6 +67,10 @@ func _erase_touching_removable_tiles() -> void:
 			var cell := Vector2i(x, y)
 			if _tile_layer.get_cell_source_id(cell) == -1:
 				continue
+			if _tile_layer.get_cell_atlas_coords(cell) == Vector2i(12,5):
+				emit_signal("player_play_done","win","player")
+				position.x = 0
+				position.y = 0
 			if _tile_layer.get_cell_atlas_coords(cell) == REMOVABLE_ATLAS:
 				_tile_layer.erase_cell(cell)
 				saved_deleted_tiles.append(cell)
@@ -73,9 +80,13 @@ func _erase_touching_removable_tiles() -> void:
 					continue
 				if spike_probe.intersects(_spike_damage_rect_local(_tile_layer, cell)):					
 					death = true
+					play = false
+					position.x = 0
+					position.y = 0
 					emit_signal("player_play_done","lose","player")
 
 
+# Axis-aligned tile range that overlaps the player’s collision shape in map coordinates.
 func _player_overlap_cell_bounds(layer: TileMapLayer) -> Rect2i:
 	var cs := $CollisionShape2D as CollisionShape2D
 	var xf := cs.global_transform
@@ -99,6 +110,7 @@ func _player_overlap_cell_bounds(layer: TileMapLayer) -> Rect2i:
 	return Rect2i(min_cell, max_cell - min_cell + Vector2i(1, 1))
 
 
+# Player AABB converted into the tilemap layer’s local space for geometry tests.
 func _player_aabb_in_layer_local(layer: TileMapLayer) -> Rect2:
 	var cs := $CollisionShape2D as CollisionShape2D
 	var half := Vector2.ZERO
@@ -121,6 +133,7 @@ func _player_aabb_in_layer_local(layer: TileMapLayer) -> Rect2:
 
 
 ## Bottom of hitbox: full AABB often sits in the upper half of a tile while feet touch the spike.
+# Narrow rectangle at the feet used to test spike overlap more fairly than the full body box.
 func _player_spike_probe_rect(layer: TileMapLayer) -> Rect2:
 	var body := _player_aabb_in_layer_local(layer)
 	var foot_h: float = maxf(body.size.y * 0.55, 8.0)
@@ -135,6 +148,7 @@ func _player_spike_probe_rect(layer: TileMapLayer) -> Rect2:
 
 
 ## Bottom half of tile (+ tiny upward bleed) so the seam with a half-tile collider still counts.
+# Local rectangle for the dangerous part of a spike tile for intersection tests.
 func _spike_damage_rect_local(layer: TileMapLayer, cell: Vector2i) -> Rect2:
 	var ts := layer.tile_set
 	var sz := Vector2(ts.tile_size)
@@ -144,6 +158,7 @@ func _spike_damage_rect_local(layer: TileMapLayer, cell: Vector2i) -> Rect2:
 	return Rect2(top_left + Vector2(0.0, y0), Vector2(sz.x, sz.y - y0))
 
 
+# Spawn player for human mode or park off-screen; restore erased coin tiles when leaving a run.
 func _on_main_menu_reset(type) -> void:
 	if type == "player":
 		play = true

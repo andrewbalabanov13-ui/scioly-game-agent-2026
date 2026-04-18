@@ -1,15 +1,18 @@
 extends Button
-@onready var ai_hide = get_parent().ai_hide
+@onready var ui_main = get_node("../../Ui - main menu")
+@onready var ui_ai_menu = get_parent()
 
-# Called when the node enters the scene tree for the first time.
+# No setup required for this menu button.
 func _ready() -> void:
 	pass # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+# Reserved (unused).
 func _process(delta: float) -> void:
-	ai_hide = get_parent().ai_hide
-	if ai_hide:
-		hide()
-	else:
-		show()
+	pass
+
+
+# Begin AI training: notify game and hide the AI menu layer.
+func _on_pressed() -> void:
+	emit_signal("reset","ai_train")
+	ui_ai_menu.visible = false

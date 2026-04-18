@@ -12,32 +12,31 @@ signal reset(type)
 @export var PlayerMenuHide := false
 @export var ai_hide := true
 @export var AiMenuHide := false
+@export var docHide := false
+@export var docLabelhide := true
 var prev_death = false
-
+@onready var ui_documentation: CanvasLayer = get_node("../../Documentation")
+@onready var ui_main: CanvasLayer = get_parent()
+@onready var ui_help: CanvasLayer = get_node("../../Help")
 @onready var ui_death: Control = get_node("../UiDeath")
 @onready var restart_lose: Button = get_node("../UiDeath/Restart")
-@onready var ui_win: Control = get_parent().get_node("UiWin")
-
-
+@onready var ui_win: CanvasLayer = get_parent().get_parent().get_node("Win")
+@onready var ui_ai_menu: CanvasLayer = get_node("../../AiMenu")
+@onready var ui_lose: CanvasLayer = get_node("../../Lose")
+# Cache UI layer references (no per-frame setup).
 func _ready() -> void:
-	ui_death.visible = false
-	ui_win.visible = false
-
+	pass
+# Show or hide this root menu control based on `menu`; other systems toggle visibility elsewhere.
 func _physics_process(delta: float) -> void:
 	if menu:
 		show()
 	else:
 		hide()
-	if player.death:
-		DeathButtonHide = false
-		ui_death.visible = true
-	else:
-		DeathButtonHide = true
-		ui_death.visible = false
+
 	
 
 
-
+# Return from death overlay: restore menu flags and clear player death.
 func _on_death_button_pressed() -> void:
 	menu = true
 	DeathButtonHide = true
@@ -46,90 +45,71 @@ func _on_death_button_pressed() -> void:
 	start_player_button_hide = true
 	ai_hide = true
 	AiMenuHide = false
+	docHide = false
 	
 	
 
 
+# Start human player mode: hide main UI and notify game systems.
 func _on_startplayer_button_pressed() -> void:
 	menu = false
 	emit_signal("reset","player") # Replace with function body.
 
 
+# Player submenu: hide main canvas and start player session from the flow that uses this button.
 func _on_player_menu_pressed() -> void:
-	PlayerMenuHide = true
-	start_player_button_hide = false
-	AiMenuHide = true
+	ui_main.visible = false
+	menu = false
+	emit_signal("reset","player")
 
-
-func _on_back_from_player_pressed() -> void:
-	PlayerMenuHide = false
-	start_player_button_hide = true
-	AiMenuHide = false
-
-
+# AI submenu: hide main UI and start AI play mode.
 func _on_ai_menu_pressed() -> void:
-	ai_hide = false # Replace with function body.
-	AiMenuHide = true
-	PlayerMenuHide = true  
-
-
-func _on_trainai_button_pressed() -> void:
-	emit_signal("reset","ai_train") # Replace with function body.
+	ui_main.visible = false
 	menu = false
+	emit_signal("reset","ai_play")
 
 
- # Replace with function body.
 
 
-func _on_startai_button_pressed() -> void:
-	emit_signal("reset","ai_play") # Replace with function body.
-	menu = false
-	
-
-
-func _on_restart_player_pressed() -> void:
-	player.death = false
-	menu = false
-	emit_signal("reset",restart_lose.reset_type) # Replace with function body.
-	DeathButtonHide = true
-	print(restart_lose.reset_type)
-
-
+# After AI training UI closes: show main menu again and reveal AI-related buttons.
 func _on_training_done_button_pressed() -> void:
 	ai_hide = false # Replace with function body.
 	menu = true
 
 
-func _on_back_from_ai_menu_pressed() -> void:
-	ai_hide = true
-	AiMenuHide = false
-	PlayerMenuHide = false
-	
-
-
+# When AI run ends (win/lose), tuck AI entry points back behind flags used by child buttons.
 func _on_ai_ai_play_done(type: Variant,reset_type) -> void:
 	ai_hide = true
 	AiMenuHide = true
-	if type == "lose":
-		ui_death.visible = true
-		ui_win.visible = false
-	if type == "win":
-		ui_win.visible = true
-		ui_death.visible = false
 
 
-func _on_retry_pressed() -> void:
-	player.death = false
+# Open Help layer and hide the main menu canvas.
+func _on_help_pressed() -> void:
+	ui_main.visible = false
+	ui_help.visible = true
+	
+# Open Documentation layer and hide the main menu canvas.
+func _on_documentation_pressed() -> void:
+	ui_main.visible = false
+	ui_documentation.visible = true
+
+
+# Start AI training mode (fast sim) from the menu.
+func _on_ai_train_pressed() -> void:
 	menu = false
-	ui_win.visible = false
-	emit_signal("reset",ui_win_retry.reset_type)
-	print(ui_win_retry.reset_type)
+	emit_signal("reset","ai_train")
 
 
-func _on_go_back_to_main_menu_pressed() -> void:
+# Close win overlay and return to the main menu canvas.
+func _on_go_back_to_menu_pressed() -> void:
+	ui_main.visible = true
 	menu = true
-	AiMenuHide = false
-	PlayerMenuHide = false
-	ai_hide = true
 	ui_win.visible = false
+
+
+# Close lose overlay, show main menu, and clear death so gameplay can restart cleanly.
+func _on_go_back_to_menu_pressed_from_Lose_ui() -> void:
+	menu = true
+	ui_lose.visible = false
+	ui_main.visible = true
 	player.death = false

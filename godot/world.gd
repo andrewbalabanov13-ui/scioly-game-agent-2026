@@ -1,13 +1,14 @@
 extends Node2D
 
-# Called when the node enters the scene tree for the first time.
+# Placeholder (no world bootstrap yet).
 func _ready() -> void:
 	pass
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+# Reserved (unused).
 func _process(delta: float) -> void:
 	pass
 
 
+# Hook for a future main-menu “start” action.
 func _on_main_menu_start() -> void:
 	pass # Replace with function body.

@@ -1,15 +1,20 @@
 extends Button
-@onready var ai_hide = get_parent().ai_hide
 
-# Called when the node enters the scene tree for the first time.
+@onready var ui_main = get_node("../../Ui - main menu")
+@onready var ui_ai_menu = get_parent()
+
+
+# Placeholder (no setup).
 func _ready() -> void:
 	pass # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+# Reserved (unused).
 func _process(delta: float) -> void:
-	ai_hide = get_parent().ai_hide
-	if ai_hide:
-		hide()
-	else:
-		show()
+	pass
+
+
+# Leave the AI submenu and show the main menu canvas again.
+func _on_pressed() -> void:
+	ui_ai_menu.visible = false
+	ui_main.visible = true

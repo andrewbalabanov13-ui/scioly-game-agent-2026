@@ -1,15 +1,16 @@
 extends Camera2D
 
 
-# Called when the node enters the scene tree for the first time.
+# Start with this camera off until an AI mode is selected from the main menu.
 func _ready() -> void:
 	self.enabled = false # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+# Reserved for per-frame camera logic (unused).
 func _process(delta: float) -> void:
 	pass
 
+# Enable this camera for AI train/play; disable it for other modes (e.g. player).
 func _on_main_menu_reset(type: Variant) -> void:
 	if type == "ai_play" or type == "ai_train":
 		self.enabled = true

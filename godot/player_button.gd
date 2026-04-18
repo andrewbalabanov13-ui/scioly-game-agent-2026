@@ -5,12 +5,14 @@ extends Button
 
 
 
+# Resolve optional menu reference and wire the pressed signal.
 func _ready() -> void:
 	if menu == null:
 		menu = get_parent() as Control
 	pressed.connect(_on_pressed)
 
 
+# Close the overlay menu so gameplay / tiles can show (delegates to menu.close_main_menu).
 func _on_pressed() -> void:
 	
 	# Start game: menu must be false so player/tiles show (open_main_menu keeps menu true and hides them).

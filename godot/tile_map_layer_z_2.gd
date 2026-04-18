@@ -3,7 +3,7 @@ signal create_states(width_in_tiles,height_in_tiles,top_left_tile_position,botto
 
 @export var height_in_tiles := 0
 @export var width_in_tiles := 0
-# Called when the node enters the scene tree for the first time.
+# Measure the used tile rect and broadcast dimensions for AI grid / state setup.
 func _ready() -> void:
 	   
 	var rect = self.get_used_rect()
@@ -19,6 +19,6 @@ func _ready() -> void:
 	print("col",+width_in_tiles)
 	print(width_in_tiles*height_in_tiles)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+# Reserved (unused).
 func _process(delta: float) -> void:
 	pass

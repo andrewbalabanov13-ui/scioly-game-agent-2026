@@ -1,11 +1,11 @@
 extends TileMapLayer
 
 
-# Called when the node enters the scene tree for the first time.
+# Placeholder (no setup).
 func _ready() -> void:
 	pass
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+# Reserved (unused).
 func _process(delta: float) -> void:
 	pass

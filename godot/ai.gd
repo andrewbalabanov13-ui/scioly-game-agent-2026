@@ -29,12 +29,14 @@ var _step_timer: float = 0.0
 var _ai_spawned: bool = false
 
 
+# Resolve tilemap reference and hide until the menu enables this agent.
 func _ready() -> void:
 	hide()
 	if tile == null:
 		tile = get_node_or_null("../Tiles/TileMapLayerZ2")
 
 
+# Map body position to a discrete RL state index clamped to the Q-table.
 func get_state() -> int:
 	if tile == null or q_table.is_empty():
 		return 0
@@ -49,6 +51,7 @@ func get_state() -> int:
 	return clampi(s, 0, q_table.size() - 1)
 
 
+# Turn the chosen action index into velocity (jump / move left / move right).
 func _apply_action(dir: int) -> void:
 	match dir:
 		0:
@@ -60,6 +63,7 @@ func _apply_action(dir: int) -> void:
 			velocity.x = -150
 
 
+# When playing: spawn once, apply gravity, pick a new action on a fixed timer, then move.
 func _physics_process(delta: float) -> void:
 	if not play:
 		return
@@ -94,6 +98,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
+# Show and enable collision for legacy “ai” mode, or hide and park when switching away.
 func _on_main_menu_reset(type: Variant) -> void:
 	if type == "ai":
 		show()
@@ -108,6 +113,7 @@ func _on_main_menu_reset(type: Variant) -> void:
 		$CollisionShape2D.disabled = true
 
 
+# Size the Q-table and tile metrics from the tilemap’s used rect signal.
 func _on_tile_map_layer_z_2_create_states(
 	all_tile_width: int,
 	all_tile_height: int,
